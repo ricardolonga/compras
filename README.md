@@ -19,7 +19,8 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 
 ### Non-functional requirements
 ---
-* JPA, CDI, EJB, JAX­RS, JSF (Java EE 6+);  
+* Java EE 6 (JPA, CDI, EJB, JAX­RS, JSF);
+* Primefaces;
 * Desenvolver API REST para o recurso de lista de compras.
 
 ### Used tools

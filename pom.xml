@@ -1,20 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	
 	<groupId>compras</groupId>
 	<artifactId>compras</artifactId>
-	<packaging>war</packaging>
 	<version>1.0</version>
+	<packaging>war</packaging>
 	<name>compras</name>
-	
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-	</properties>
-	
 	<developers>
 		<developer>
 			<name>Ricardo Longa</name>
@@ -22,7 +15,22 @@
 			<url>http://www.ricardolonga.com.br</url>
 		</developer>
 	</developers>
-		
+	<properties>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.target>1.6</maven.compiler.target>
+	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>3.0.2.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
@@ -31,14 +39,14 @@
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.faces</groupId>
+			<artifactId>jboss-jsf-api_2.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
-	
 	<profiles>
 		<profile>
-			<!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
-			<!-- Use this profile for any OpenShift specific customization your app will need. -->
-			<!-- By default that is to put the resulting archive into the 'deployments' folder. -->
-			<!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
 			<id>openshift</id>
 			<build>
 				<finalName>compras</finalName>
