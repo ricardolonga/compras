@@ -3,7 +3,6 @@ package br.com.ricardolonga.compras.domain.entities;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +19,6 @@ public class Lista extends AbstractEntity {
 
     private Descricao descricao;
 
-    @ManyToMany(fetch = FetchType.LAZY)
     private Set<Item> itens = new HashSet<Item>();
 
     Lista() {}
@@ -29,7 +27,6 @@ public class Lista extends AbstractEntity {
         return new Lista();
     }
 
-    @Column
     @Embedded
     public Descricao getDescricao() {
         return this.descricao;
@@ -39,6 +36,7 @@ public class Lista extends AbstractEntity {
         this.descricao = descricao;
     }
 
+    @ManyToMany(fetch = FetchType.LAZY)
     public Set<Item> getItens() {
         return this.itens;
     }

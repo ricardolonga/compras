@@ -29,7 +29,6 @@ public class Item extends AbstractEntity {
         return new Item();
     }
 
-    @Column
     @Embedded
     public Descricao getDescricao() {
         return this.descricao;
@@ -48,7 +47,6 @@ public class Item extends AbstractEntity {
         this.quantidade = quantidade;
     }
 
-    @Column
     @Embedded
     public Imagem getImagem() {
         return this.imagem;
@@ -58,7 +56,6 @@ public class Item extends AbstractEntity {
         this.imagem = imagem;
     }
 
-    @Column
     @Embedded
     public Valor getValorUnitario() {
         return this.valorUnitario;
