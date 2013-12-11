@@ -17,7 +17,7 @@ public class Item extends AbstractEntity {
 
     private Descricao descricao;
 
-    private int quantidade;
+    private int quantidade = 1;
 
     private Imagem imagem;
 

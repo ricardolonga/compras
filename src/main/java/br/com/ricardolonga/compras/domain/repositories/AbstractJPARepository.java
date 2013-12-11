@@ -1,6 +1,5 @@
 package br.com.ricardolonga.compras.domain.repositories;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,10 +12,8 @@ public abstract class AbstractJPARepository<T> implements IRepository<T, Long> {
 
     private final Class<T> typeClass;
 
-    @SuppressWarnings("unchecked")
-    public AbstractJPARepository() {
-        ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
-        this.typeClass = (Class<T>) genericSuperclass.getActualTypeArguments()[0];
+    public AbstractJPARepository(Class<T> typeClass) {
+        this.typeClass = typeClass;
     }
 
     @Override

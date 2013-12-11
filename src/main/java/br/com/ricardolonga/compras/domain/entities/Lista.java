@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import br.com.ricardolonga.compras.domain.aggregates.Descricao;
@@ -19,6 +19,7 @@ public class Lista extends AbstractEntity {
 
     private Descricao descricao;
 
+    @OneToMany(fetch = FetchType.LAZY)
     private Set<Item> itens = new HashSet<Item>();
 
     Lista() {}
@@ -36,7 +37,6 @@ public class Lista extends AbstractEntity {
         this.descricao = descricao;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
     public Set<Item> getItens() {
         return this.itens;
     }

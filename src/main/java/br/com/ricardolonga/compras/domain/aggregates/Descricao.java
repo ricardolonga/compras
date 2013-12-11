@@ -4,20 +4,36 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 @Access(AccessType.PROPERTY)
 public class Descricao {
 
-    private String descricao;
+    private String texto;
 
-    @Column
-    public String getDescricao() {
-        return descricao;
+    Descricao() {}
+
+    public static Descricao newInstance(String descricao) {
+        if (descricao == null || descricao.trim().isEmpty()) {
+            throw new IllegalArgumentException("Nao eh permitido criar uma descricao vazia.");
+        }
+
+        Descricao novaDescricao = new Descricao();
+
+        novaDescricao.setTexto(descricao);
+
+        return novaDescricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    @NotNull
+    @Column(name = "descricao", nullable = false)
+    public String getTexto() {
+        return texto;
+    }
+
+    void setTexto(String texto) {
+        this.texto = texto;
     }
 
 }

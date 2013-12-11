@@ -23,14 +23,21 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 * Primefaces;
 * Desenvolver API REST para o recurso de lista de compras.
 
-### Used tools
+### Used tools and techniques
 ---
 * JBoss AS 7 (with H2 database);
 * Eclipse Kepler;
 * JBoss Forge;
+* Arquillian for integrated/unit tests;
 * Openshift;
 * Astah Community (UML Editor);
-* Git / Github.
+* Git / Github;
+* Test Driven Development;
+* Domain Driven Design.
+
+### Recommended techniques but not used
+---
+* Behavior Driven Development.
 
 ### Autor
 ---
