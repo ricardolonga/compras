@@ -1,18 +1,21 @@
-package br.com.ricardolonga.compras.domain.repositories;
+package br.com.ricardolonga.compras.infrastructure.persistence.jpa;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-public abstract class AbstractJPARepository<T> implements IRepository<T, Long> {
+import br.com.ricardolonga.compras.domain.model.entities.BaseEntity;
+import br.com.ricardolonga.compras.domain.repositories.IGenericRepository;
 
-    @Inject
+public class GenericDAO<T extends BaseEntity<?>> implements IGenericRepository<T, Long> {
+
+    @PersistenceContext
     protected EntityManager entityManager;
 
     private final Class<T> typeClass;
 
-    public AbstractJPARepository(Class<T> typeClass) {
+    public GenericDAO(Class<T> typeClass) {
         this.typeClass = typeClass;
     }
 
@@ -28,7 +31,7 @@ public abstract class AbstractJPARepository<T> implements IRepository<T, Long> {
 
     @Override
     public void persist(T entity) {
-        entityManager.persist(entity);
+        entityManager.persist(entityManager.merge(entity));
     }
 
     @Override

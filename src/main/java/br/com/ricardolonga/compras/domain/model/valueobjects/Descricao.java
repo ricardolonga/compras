@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.domain.aggregates;
+package br.com.ricardolonga.compras.domain.model.valueobjects;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -6,9 +6,13 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+
 @Embeddable
 @Access(AccessType.PROPERTY)
-public class Descricao {
+public class Descricao extends BaseValueObject<Descricao> {
+
+    private static final long serialVersionUID = -6828614119310310055L;
 
     private String texto;
 
@@ -34,6 +38,16 @@ public class Descricao {
 
     void setTexto(String texto) {
         this.texto = texto;
+    }
+
+    @Override
+    public int hashCode() {
+        return texto.hashCode();
+    }
+
+    @Override
+    protected EqualsBuilder getEqualsBuilder(Descricao other) {
+        return new EqualsBuilder().append(texto, other.texto);
     }
 
 }

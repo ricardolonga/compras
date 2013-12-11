@@ -10,13 +10,13 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import br.com.ricardolonga.compras.domain.aggregates.Descricao;
-import br.com.ricardolonga.compras.domain.entities.Item;
-import br.com.ricardolonga.compras.domain.repositories.AbstractJPARepository;
-import br.com.ricardolonga.compras.domain.repositories.IRepository;
-import br.com.ricardolonga.compras.domain.repositories.ItemRepository;
+import br.com.ricardolonga.compras.domain.model.entities.Item;
+import br.com.ricardolonga.compras.domain.model.valueobjects.Descricao;
+import br.com.ricardolonga.compras.domain.repositories.IGenericRepository;
 import br.com.ricardolonga.compras.domain.services.ItemService;
-import br.com.ricardolonga.compras.infrastructure.LoggerProducer;
+import br.com.ricardolonga.compras.infrastructure.persistence.jpa.GenericDAO;
+import br.com.ricardolonga.compras.infrastructure.persistence.jpa.ItemDAO;
+import br.com.ricardolonga.compras.infrastructure.producers.LoggerProducer;
 
 @RunWith(Arquillian.class)
 public class ItemTest {
@@ -25,14 +25,14 @@ public class ItemTest {
     private ItemService itemService;
 
     @Inject
-    ItemRepository itemRepository;
+    ItemDAO itemRepository;
 
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class) //
                 .addPackages(true, Item.class.getPackage(), Descricao.class.getPackage(), LoggerProducer.class.getPackage()) //
                 .addClass(ItemService.class) //
-                .addClasses(ItemRepository.class, AbstractJPARepository.class, IRepository.class) //
+                .addClasses(ItemDAO.class, GenericDAO.class, IGenericRepository.class) //
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml") //
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }

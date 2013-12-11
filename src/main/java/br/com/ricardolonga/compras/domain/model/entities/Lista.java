@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.domain.entities;
+package br.com.ricardolonga.compras.domain.model.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,13 +9,15 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import br.com.ricardolonga.compras.domain.aggregates.Descricao;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import br.com.ricardolonga.compras.domain.model.valueobjects.Descricao;
 
 @Entity
 @Table(name = "listas")
-public class Lista extends AbstractEntity {
+public class Lista extends BaseEntity<Lista> {
 
-    private static final long serialVersionUID = -1576978480616329305L;
+    private static final long serialVersionUID = 1L;
 
     private Descricao descricao;
 
@@ -43,6 +45,11 @@ public class Lista extends AbstractEntity {
 
     public void setItens(final Set<Item> itens) {
         this.itens = itens;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(id).append(descricao).append(itens).toHashCode();
     }
 
 }

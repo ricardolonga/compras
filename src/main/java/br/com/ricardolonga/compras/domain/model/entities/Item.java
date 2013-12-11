@@ -1,19 +1,21 @@
-package br.com.ricardolonga.compras.domain.entities;
+package br.com.ricardolonga.compras.domain.model.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import br.com.ricardolonga.compras.domain.aggregates.Descricao;
-import br.com.ricardolonga.compras.domain.aggregates.Imagem;
-import br.com.ricardolonga.compras.domain.aggregates.Valor;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import br.com.ricardolonga.compras.domain.model.valueobjects.Descricao;
+import br.com.ricardolonga.compras.domain.model.valueobjects.Imagem;
+import br.com.ricardolonga.compras.domain.model.valueobjects.Valor;
 
 @Entity
 @Table(name = "itens")
-public class Item extends AbstractEntity {
+public class Item extends BaseEntity<Item> {
 
-    private static final long serialVersionUID = -7346106688087648290L;
+    private static final long serialVersionUID = 1L;
 
     private Descricao descricao;
 
@@ -63,6 +65,11 @@ public class Item extends AbstractEntity {
 
     public void setValorUnitario(Valor valorUnitario) {
         this.valorUnitario = valorUnitario;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(id).append(descricao).append(quantidade).append(imagem).append(valorUnitario).toHashCode();
     }
 
 }

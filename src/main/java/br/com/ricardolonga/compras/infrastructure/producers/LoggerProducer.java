@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.infrastructure;
+package br.com.ricardolonga.compras.infrastructure.producers;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
