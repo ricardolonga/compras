@@ -1,5 +1,6 @@
 # Compras  
 ---
+
 Java Web Application for to management of the list buy's on supermarket.
 
 [![Build Status](https://travis-ci.org/ricardolonga/google-maps-directions.png?branch=master)](https://travis-ci.org/ricardolonga/google-maps-directions)
@@ -20,12 +21,13 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 ### Non-functional requirements
 ---
 * Java EE 6 (JPA, CDI, EJB, JAX­RS, JSF);
-* Primefaces;
 * Desenvolver API REST para o recurso de lista de compras.
 
 ### Used tools and techniques
 ---
 * JBoss AS 7 (with H2 database);
+* Primefaces;
+* Apache CODI (JSF module for @ViewAccessScoped);
 * Eclipse Kepler;
 * JBoss Forge;
 * Arquillian for integrated/unit tests;
@@ -37,7 +39,8 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 
 ### Recommended techniques but not used
 ---
-* Behavior Driven Development.
+* Behavior Driven Development;
+* PrettyFaces for URL rewriting.
 
 ### Autor
 ---
