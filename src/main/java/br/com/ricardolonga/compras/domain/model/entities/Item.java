@@ -17,13 +17,13 @@ public class Item extends BaseEntity<Item> {
 
     private static final long serialVersionUID = 1L;
 
-    private Descricao descricao;
+    private Descricao descricao = Descricao.newInstance();
 
-    private int quantidade = 1;
+    private int quantidade;
 
     private Imagem imagem;
 
-    private Valor valorUnitario;
+    private Valor valorUnitario = Valor.newInstance();
 
     Item() {}
 

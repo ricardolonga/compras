@@ -1,54 +1,61 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	template="/resources/scaffold/pageTemplate.xhtml">
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
-		<f:viewParam name="page" value="#{itemBean.page}"/>
-		<f:event type="preRenderView" listener="#{itemBean.paginate}"/>
+		<f:viewParam name="page" value="#{itemController.page}"/>
+		<f:event type="preRenderView" listener="#{itemController.paginate}"/>
 	</f:metadata>
 
-	<ui:param name="pageTitle" value="Search Item entities"/>
+	<ui:param name="pageTitle" value="#{msg['title.consulta_itens']}"/>
 
-	<ui:define name="header">
-		Item
-	</ui:define>
-
-	<ui:define name="subheader">
-		Search Item entities
-	</ui:define>
-
-	<ui:define name="footer"/>
+	<ui:define name="header">#{msg['title.consulta_itens']}</ui:define>
 
 	<ui:define name="main">
 		<h:form id="search">
 			<f:validateBean disabled="true">
 				<h:panelGroup styleClass="search">
-
 					<h:panelGrid columnClasses="label,component,required" columns="3">
-						<h:outputLabel for="itemBeanExampleQuantidade" value="Quantidade:"/>
+						<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
 						<h:panelGroup>
-							<h:inputText id="itemBeanExampleQuantidade" value="#{itemBean.example.quantidade}"/>
-							<h:message for="itemBeanExampleQuantidade" styleClass="error"/>
+							<h:inputText id="descricao" value="#{itemController.example.descricao.texto}"/>
+							<h:message for="descricao" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+
+						<h:outputLabel for="quantidade" value="#{msg['label.quantidade']}:"/>
+						<h:panelGroup>
+							<h:inputText id="quantidade" value="#{itemController.example.quantidade}"/>
+							<h:message for="quantidade" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						
+						<h:outputLabel for="valorUnitario" value="#{msg['label.valor_unitario']}:"/>
+						<h:panelGroup>
+							<h:inputText id="valorUnitario" value="#{itemController.example.valorUnitario.valor}" converter="valorMonetarioConverter" />
+							<h:message for="valorUnitario" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
 					</h:panelGrid>
+					
 					<h:panelGroup styleClass="buttons">
-						<h:commandLink value="Search" action="#{itemBean.search}" styleClass="btn btn-primary"/>
-						<h:commandLink value="Create New" action="#{itemBean.create}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg['button.novo']}" action="#{itemController.create}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg['button.pesquisar']}" action="#{itemController.search}" styleClass="btn btn-primary"/>
 					</h:panelGroup>
 				</h:panelGroup>
 			</f:validateBean>
 			
-			<h:dataTable id="itemBeanPageItems" styleClass="data-table" value="#{itemBean.pageItems}" var="_item">
+			<h:dataTable id="itemControllerPageItems" styleClass="data-table" value="#{itemController.pageItems}" var="_item" rendered="#{!itemController.pageItems.isEmpty()}">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText value="Texto"/>
 					</f:facet>
-					<h:link outcome="/item/view">
+					
+					<h:link outcome="pretty:item-view">
 						<f:param name="id" value="#{_item.id}"/>
 						<h:outputText id="itemDescricaoTexto" value="#{_item.descricao.texto}"/>
 					</h:link>
@@ -57,7 +64,8 @@
 					<f:facet name="header">
 						<h:outputText value="Quantidade"/>
 					</f:facet>
-					<h:link outcome="/item/view">
+					
+					<h:link outcome="pretty:item-view">
 						<f:param name="id" value="#{_item.id}"/>
 						<h:outputText id="itemQuantidade" value="#{_item.quantidade}"/>
 					</h:link>
@@ -66,17 +74,17 @@
 					<f:facet name="header">
 						<h:outputText value="Valor"/>
 					</f:facet>
-					<h:link outcome="/item/view">
+					
+					<h:link outcome="pretty:item-view">
 						<f:param name="id" value="#{_item.id}"/>
 						<h:outputText id="itemValorUnitarioValor" value="#{_item.valorUnitario.valor}"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>
+			
 			<ui:include src="/resources/scaffold/paginator.xhtml">
-				<ui:param name="paginatorBean" value="#{itemBean}"/>
+				<ui:param name="paginatorBean" value="#{itemController}"/>
 			</ui:include>
 		</h:form>
-			
 	</ui:define>
-
 </ui:composition>

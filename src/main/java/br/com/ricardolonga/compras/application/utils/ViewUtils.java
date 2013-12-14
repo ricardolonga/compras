@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.application;
+package br.com.ricardolonga.compras.application.utils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;

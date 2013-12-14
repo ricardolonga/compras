@@ -20,16 +20,8 @@ public class Valor extends BaseValueObject<Valor> {
 
     Valor() {}
 
-    public static Valor newInstance(BigDecimal valor) {
-        if (valor == null) {
-            throw new IllegalArgumentException();
-        }
-
-        Valor novoValor = new Valor();
-
-        novoValor.setValor(valor);
-
-        return novoValor;
+    public static Valor newInstance() {
+        return new Valor();
     }
 
     @Column
@@ -38,7 +30,7 @@ public class Valor extends BaseValueObject<Valor> {
         return valor;
     }
 
-    void setValor(BigDecimal valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 

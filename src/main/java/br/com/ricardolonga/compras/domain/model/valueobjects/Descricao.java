@@ -18,16 +18,8 @@ public class Descricao extends BaseValueObject<Descricao> {
 
     Descricao() {}
 
-    public static Descricao newInstance(String descricao) {
-        if (descricao == null || descricao.trim().isEmpty()) {
-            throw new IllegalArgumentException("Nao eh permitido criar uma descricao vazia.");
-        }
-
-        Descricao novaDescricao = new Descricao();
-
-        novaDescricao.setTexto(descricao);
-
-        return novaDescricao;
+    public static Descricao newInstance() {
+        return new Descricao();
     }
 
     @NotNull
@@ -36,7 +28,7 @@ public class Descricao extends BaseValueObject<Descricao> {
         return texto;
     }
 
-    void setTexto(String texto) {
+    public void setTexto(String texto) {
         this.texto = texto;
     }
 

@@ -1,6 +1,5 @@
-package br.com.ricardolonga.compras.application.mbeans;
+package br.com.ricardolonga.compras.application.controller;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +28,7 @@ import br.com.ricardolonga.compras.domain.model.entities.Item;
 @Named
 @Stateful
 @ConversationScoped
-public class ItemBean implements Serializable {
+public class ItemController extends AbstractController {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,13 +58,11 @@ public class ItemBean implements Serializable {
     private EntityManager entityManager;
 
     public String create() {
-
         this.conversation.begin();
-        return "create?faces-redirect=true";
+        return "pretty:item-create";
     }
 
     public void retrieve() {
-
         if (FacesContext.getCurrentInstance().isPostback()) {
             return;
         }
@@ -82,14 +79,12 @@ public class ItemBean implements Serializable {
     }
 
     public Item findById(Long id) {
-
         return this.entityManager.find(Item.class, id);
     }
 
     /*
      * Support updating and deleting Item entities
      */
-
     public String update() {
         this.conversation.end();
 
@@ -115,6 +110,7 @@ public class ItemBean implements Serializable {
 
             this.entityManager.remove(deletableEntity);
             this.entityManager.flush();
+
             return "search?faces-redirect=true";
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
@@ -125,7 +121,6 @@ public class ItemBean implements Serializable {
     /*
      * Support searching Item entities with pagination
      */
-
     private int page;
     private long count;
     private List<Item> pageItems;
@@ -157,11 +152,9 @@ public class ItemBean implements Serializable {
     }
 
     public void paginate() {
-
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
         // Populate this.count
-
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
         Root<Item> root = countCriteria.from(Item.class);
         countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
@@ -177,7 +170,6 @@ public class ItemBean implements Serializable {
     }
 
     private Predicate[] getSearchPredicates(Root<Item> root) {
-
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         List<Predicate> predicatesList = new ArrayList<Predicate>();
 
@@ -200,9 +192,7 @@ public class ItemBean implements Serializable {
     /*
      * Support listing and POSTing back Item entities (e.g. from inside an HtmlSelectOneMenu)
      */
-
     public List<Item> getAll() {
-
         CriteriaQuery<Item> criteria = this.entityManager.getCriteriaBuilder().createQuery(Item.class);
         return this.entityManager.createQuery(criteria.select(criteria.from(Item.class))).getResultList();
     }
@@ -211,20 +201,16 @@ public class ItemBean implements Serializable {
     private SessionContext sessionContext;
 
     public Converter getConverter() {
-
-        final ItemBean ejbProxy = this.sessionContext.getBusinessObject(ItemBean.class);
+        final ItemController ejbProxy = this.sessionContext.getBusinessObject(ItemController.class);
 
         return new Converter() {
-
             @Override
             public Object getAsObject(FacesContext context, UIComponent component, String value) {
-
                 return ejbProxy.findById(Long.valueOf(value));
             }
 
             @Override
             public String getAsString(FacesContext context, UIComponent component, Object value) {
-
                 if (value == null) {
                     return "";
                 }
@@ -237,7 +223,6 @@ public class ItemBean implements Serializable {
     /*
      * Support adding children to bidirectional, one-to-many tables
      */
-
     private Item add = Item.newInstance();
 
     public Item getAdd() {

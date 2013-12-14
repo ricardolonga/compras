@@ -2,6 +2,10 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	metadata-complete="false" version="3.0"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+	
+	<!-- ================== -->
+	<!--   CONTEXT PARAMS   --> 
+	<!-- ================== -->
 	<context-param>
 		<param-name>com.ocpsoft.pretty.DEVELOPMENT</param-name>
 		<param-value>true</param-value>
@@ -14,12 +18,34 @@
 		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	
+	<!-- ================== -->
+	<!--  SERVLETS MAPPING  --> 
+	<!-- ================== -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.jsf</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ================= -->
+	<!--    ERROR PAGES    -->
+	<!-- ================= -->
 	<error-page>
 		<error-code>404</error-code>
-		<location>/error.xhtml</location>
+		<location>/error.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/error.xhtml</location>
+		<location>/error.jsf</location>
 	</error-page>
+	
+	<mime-mapping>
+		<extension>ico</extension>
+		<mime-type>image/x-icon</mime-type>
+	</mime-mapping>
 </web-app>

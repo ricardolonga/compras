@@ -1,16 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <pretty-config xmlns="http://ocpsoft.com/prettyfaces/3.3.3"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.3 http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.3.xsd">
+	xsi:schemaLocation="http://ocpsoft.com/prettyfaces/3.3.0 http://ocpsoft.com/xml/ns/prettyfaces/ocpsoft-pretty-faces-3.3.0.xsd">
 
-	<url-mapping>
-		<pattern value="/itens" />
-		<view-id>/faces/item/search.xhtml</view-id>
+    <!-- ================= -->
+	<!--   DEFAULT PAGES   --> 
+	<!-- ================= -->
+	
+	<url-mapping id="home">
+		<pattern value="/home" />
+		<view-id>/index.jsf</view-id>
 	</url-mapping>
 
-	<url-mapping>
-		<pattern value="/inicial" />
-		<view-id>/faces/index.xhtml</view-id>
+	<!-- ============= -->
+	<!--   ITEM CRUD   --> 
+	<!-- ============= -->
+	
+	<url-mapping id="item-search">
+		<pattern value="/visualizar/itens" />
+		<view-id>/item/search.jsf</view-id>
 	</url-mapping>
 
+	<url-mapping id="item-view">
+		<pattern value="/visualizar/item/#{id}" />
+		<view-id>/item/view.jsf</view-id>
+	</url-mapping>
+	
+	<url-mapping id="item-edit">
+		<pattern value="/alterar/item/#{id}" />
+		<view-id>/item/create.jsf</view-id>
+	</url-mapping>
+	
+	<url-mapping id="item-create">
+		<pattern value="/novo/item" />
+		<view-id>/item/create.jsf?faces-redirect=true</view-id>
+	</url-mapping>
+	
+	<!-- ============== -->
+	<!--   LISTA CRUD   --> 
+	<!-- ============== -->
+	
+	<url-mapping id="lista-search">
+		<pattern value="/listas" />
+		<view-id>/lista/search.jsf</view-id>
+	</url-mapping>
+
+	<url-mapping id="lista-view">
+		<pattern value="/lista/#{id}" />
+		<view-id>/lista/view.jsf</view-id>
+	</url-mapping>
+	
+	<url-mapping id="lista-create">
+		<pattern value="/lista/novo/#{cid}" />
+		<view-id>/lista/create.jsf</view-id>
+	</url-mapping>
+	
 </pretty-config>

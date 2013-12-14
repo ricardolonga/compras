@@ -8,92 +8,67 @@
 	template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
-		<f:viewParam name="id" value="#{itemBean.id}"/>
-		<f:event type="preRenderView" listener="#{itemBean.retrieve}"/>
+		<f:viewParam name="id" value="#{itemController.id}"/>
+		<f:event type="preRenderView" listener="#{itemController.retrieve}"/>
 	</f:metadata>
 
-	<ui:param name="pageTitle" value="Create Item"/>
+	<ui:param name="pageTitle" value="#{msg['title.novo_item']}"/>
 
-	<ui:define name="header">
-		Item
-	</ui:define>
+	<ui:define name="header">#{msg['title.novo_item']}</ui:define>
 
 	<ui:define name="subheader">
 		<c:choose>
-			<c:when test="#{!empty itemBean.id}">
-				Edit existing Item
+			<c:when test="#{!empty itemController.id}">
+				#{msg['msg.editando_item']}
 			</c:when>
 			<c:otherwise>
-				Create a new Item
+				#{msg['msg.criando_item']}
 			</c:otherwise>
 		</c:choose>
 	</ui:define>
-
-	<ui:define name="footer"/>
 
 	<ui:define name="main">
 		<h:form id="create">
 			<h:messages globalOnly="true" styleClass="error"/>
 
 			<h:panelGrid columnClasses="label,component,required" columns="3">
-				<h:outputLabel value="Descricao:"/>
+				<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
 				<h:panelGroup>
-					<h:commandLink action="#{itemBean.item.newDescricao}" rendered="#{empty itemBean.item.descricao}" value="Create New Descricao"/>
-					<h:panelGrid columnClasses="label,component,required" columns="3" rendered="#{!empty itemBean.item.descricao}">
-						<h:outputLabel for="itemBeanItemDescricaoTexto" value="Texto:"/>
-						<h:outputText id="itemBeanItemDescricaoTexto" value="#{itemBean.item.descricao.texto}"/>
-						<h:outputText/>
-					</h:panelGrid>
+					<h:inputText id="descricao" value="#{itemController.item.descricao.texto}"/>
+					<h:message for="descricao" styleClass="error"/>
 				</h:panelGroup>
-				
+				<h:outputText/>
+
+				<h:outputLabel for="quantidade" value="#{msg['label.quantidade']}:"/>
+				<h:panelGroup>
+					<h:inputText id="quantidade" value="#{itemController.item.quantidade}"/>
+					<h:message for="quantidade" styleClass="error"/>
+				</h:panelGroup>
 				<h:outputText/>
 				
-				<h:outputLabel for="itemBeanItemQuantidade" value="Quantidade:"/>
+				<h:outputLabel for="valorUnitario" value="#{msg['label.valor_unitario']}:"/>
 				<h:panelGroup>
-					<h:inputText id="itemBeanItemQuantidade" value="#{itemBean.item.quantidade}"/>
-					<h:message for="itemBeanItemQuantidade" styleClass="error"/>
+					<h:inputText id="valorUnitario" value="#{itemController.item.valorUnitario.valor}" converter="valorMonetarioConverter" />
+					<h:message for="valorUnitario" styleClass="error"/>
 				</h:panelGroup>
-				
-				<h:outputText/>
-				
-				<h:outputLabel value="Imagem:"/>
-				<h:panelGroup>
-					<h:commandLink action="#{itemBean.item.newImagem}" rendered="#{empty itemBean.item.imagem}" value="Create New Imagem"/>
-					<h:panelGrid columnClasses="label,component,required" columns="3" rendered="#{!empty itemBean.item.imagem}">
-						<h:outputLabel for="itemBeanItemImagemConteudo" value="Conteudo:"/>
-						<h:panelGrid columnClasses="label,component,required" columns="3" id="itemBeanItemImagemConteudo"/>
-						<h:outputText/>
-					</h:panelGrid>
-				</h:panelGroup>
-				
-				<h:outputText/>
-				
-				<h:outputLabel value="Valor Unitario:"/>
-				<h:panelGroup>
-					<h:commandLink action="#{itemBean.item.newValorUnitario}" rendered="#{empty itemBean.item.valorUnitario}" value="Create New Valor Unitario"/>
-					<h:panelGrid columnClasses="label,component,required" columns="3" rendered="#{!empty itemBean.item.valorUnitario}">
-						<h:outputLabel for="itemBeanItemValorUnitarioValor" value="Valor:"/>
-						<h:outputText id="itemBeanItemValorUnitarioValor" value="#{itemBean.item.valorUnitario.valor}"/>
-						<h:outputText/>
-					</h:panelGrid>
-				</h:panelGroup>
-				
 				<h:outputText/>
 			</h:panelGrid>
 
 			<div class="buttons">
-				<h:commandLink value="Save" action="#{itemBean.update}" styleClass="btn btn-primary"/>
 				<c:choose>
-					<c:when test="#{!empty itemBean.id}">
-						<h:link value="Cancel" outcome="view" styleClass="btn btn-primary">
-							<f:param name="id" value="#{itemBean.id}"/>
-						</h:link>
-						<h:commandLink value="Delete" action="#{itemBean.delete}" styleClass="btn btn-primary"/>
+					<c:when test="#{empty itemController.id}">
+						<h:link value="#{msg['button.cancelar']}" outcome="pretty:item-search" styleClass="btn btn-primary"/>
 					</c:when>
+					
 					<c:otherwise>
-						<h:link value="Cancel" outcome="search" styleClass="btn btn-primary"/>
+						<h:link value="#{msg['button.cancelar']}" outcome="view" styleClass="btn btn-primary">
+							<f:param name="id" value="#{itemController.id}"/>
+						</h:link>
+						<h:commandLink value="#{msg['button.excluir']}" action="#{itemController.delete}" styleClass="btn btn-primary"/>
 					</c:otherwise>
 				</c:choose>
+
+				<h:commandLink value="#{msg['button.salvar']}" action="#{itemController.update}" styleClass="btn btn-primary"/>
 			</div>
 		</h:form>
 	</ui:define>
