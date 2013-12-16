@@ -9,8 +9,6 @@ public interface IGenericRepository<T extends BaseEntity<?>, K extends Serializa
 
     T findById(K id);
 
-    void update(T entity);
-
     void persist(T entity);
 
     void remove(T entity);

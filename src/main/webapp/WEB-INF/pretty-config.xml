@@ -12,28 +12,28 @@
 		<view-id>/index.jsf</view-id>
 	</url-mapping>
 
-	<!-- ============= -->
-	<!--   ITEM CRUD   --> 
-	<!-- ============= -->
+	<!-- ================ -->
+	<!--   PRODUTO CRUD   --> 
+	<!-- ================ -->
 	
-	<url-mapping id="item-search">
-		<pattern value="/visualizar/itens" />
-		<view-id>/item/search.jsf</view-id>
+	<url-mapping id="produto-search">
+		<pattern value="/visualizar/produtos" />
+		<view-id>/produto/search.jsf</view-id>
 	</url-mapping>
 
-	<url-mapping id="item-view">
-		<pattern value="/visualizar/item/#{id}" />
-		<view-id>/item/view.jsf</view-id>
+	<url-mapping id="produto-view">
+		<pattern value="/visualizar/produto/#{id}" />
+		<view-id>/produto/view.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="item-edit">
-		<pattern value="/alterar/item/#{id}" />
-		<view-id>/item/create.jsf</view-id>
+	<url-mapping id="produto-edit">
+		<pattern value="/alterar/produto/#{id}" />
+		<view-id>/produto/create.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="item-create">
-		<pattern value="/novo/item" />
-		<view-id>/item/create.jsf?faces-redirect=true</view-id>
+	<url-mapping id="produto-create">
+		<pattern value="/novo/produto" />
+		<view-id>/produto/create.jsf?faces-redirect=true</view-id>
 	</url-mapping>
 	
 	<!-- ============== -->
@@ -41,18 +41,23 @@
 	<!-- ============== -->
 	
 	<url-mapping id="lista-search">
-		<pattern value="/listas" />
+		<pattern value="/visualizar/listas" />
 		<view-id>/lista/search.jsf</view-id>
 	</url-mapping>
 
 	<url-mapping id="lista-view">
-		<pattern value="/lista/#{id}" />
+		<pattern value="/visualizar/lista/#{id}" />
 		<view-id>/lista/view.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="lista-create">
-		<pattern value="/lista/novo/#{cid}" />
+	<url-mapping id="lista-edit">
+		<pattern value="/alterar/lista/#{id}" />
 		<view-id>/lista/create.jsf</view-id>
+	</url-mapping>
+	
+	<url-mapping id="lista-create">
+		<pattern value="/novo/lista" />
+		<view-id>/lista/create.jsf?faces-redirect=true</view-id>
 	</url-mapping>
 	
 </pretty-config>

@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{listaController.id}"/>
+		<f:event type="preRenderView" listener="#{listaController.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="#{msg['title.visualizar_lista']}"/>
+
+	<ui:define name="header">#{msg['title.visualizar_lista']}</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="itens" value="#{msg['label.itens']}:"/>
+			<h:dataTable id="itens" styleClass="data-table" value="#{forgeview:asList(listaController.lista.itens)}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.descricao']}"/>
+					</f:facet>
+					
+					<h:link outcome="pretty:item-view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemDescricao" value="#{_item.descricao.texto}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.quantidade']}"/>
+					</f:facet>
+					<h:link outcome="pretty:item-view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemQuantidade" value="#{_item.quantidade}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<h:outputText/>
+			
+			<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
+			<h:outputText id="descricao" value="#{listaController.lista.descricao.texto}"/>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="#{msg['button.voltar']}" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="#{msg['button.editar']}" outcome="pretty:lista-edit" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="#{msg['button.novo']}" outcome="pretty:lista-create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>

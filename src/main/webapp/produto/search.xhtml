@@ -7,8 +7,8 @@
 				template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
-		<f:viewParam name="page" value="#{itemController.page}"/>
-		<f:event type="preRenderView" listener="#{itemController.paginate}"/>
+		<f:viewParam name="page" value="#{produtoController.page}"/>
+		<f:event type="preRenderView" listener="#{produtoController.paginate}"/>
 	</f:metadata>
 
 	<ui:param name="pageTitle" value="#{msg['title.consulta_itens']}"/>
@@ -22,34 +22,34 @@
 					<h:panelGrid columnClasses="label,component,required" columns="3">
 						<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
 						<h:panelGroup>
-							<h:inputText id="descricao" value="#{itemController.example.descricao.texto}"/>
+							<h:inputText id="descricao" value="#{produtoController.example.descricao.texto}"/>
 							<h:message for="descricao" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
 
 						<h:outputLabel for="quantidade" value="#{msg['label.quantidade']}:"/>
 						<h:panelGroup>
-							<h:inputText id="quantidade" value="#{itemController.example.quantidade}"/>
+							<h:inputText id="quantidade" value="#{produtoController.example.quantidade}"/>
 							<h:message for="quantidade" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
 						
 						<h:outputLabel for="valorUnitario" value="#{msg['label.valor_unitario']}:"/>
 						<h:panelGroup>
-							<h:inputText id="valorUnitario" value="#{itemController.example.valorUnitario.valor}" converter="valorMonetarioConverter" />
+							<h:inputText id="valorUnitario" value="#{produtoController.example.valorUnitario.valor}" converter="valorMonetarioConverter" />
 							<h:message for="valorUnitario" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
 					</h:panelGrid>
 					
 					<h:panelGroup styleClass="buttons">
-						<h:commandLink value="#{msg['button.novo']}" action="#{itemController.create}" styleClass="btn btn-primary"/>
-						<h:commandLink value="#{msg['button.pesquisar']}" action="#{itemController.search}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg['button.novo']}" action="#{produtoController.create}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg['button.pesquisar']}" action="#{produtoController.search}" styleClass="btn btn-primary"/>
 					</h:panelGroup>
 				</h:panelGroup>
 			</f:validateBean>
 			
-			<h:dataTable id="itemControllerPageItems" styleClass="data-table" value="#{itemController.pageItems}" var="_item" rendered="#{!itemController.pageItems.isEmpty()}">
+			<h:dataTable id="produtoControllerPageItems" styleClass="data-table" value="#{produtoController.pageItems}" var="_item" rendered="#{!produtoController.pageItems.isEmpty()}">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText value="Texto"/>
@@ -77,13 +77,13 @@
 					
 					<h:link outcome="pretty:item-view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemValorUnitarioValor" value="#{_item.valorUnitario.valor}"/>
+						<h:outputText id="itemValorUnitarioValor" value="#{_item.valorUnitario.valor}" converter="valorMonetarioConverter"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>
 			
 			<ui:include src="/resources/scaffold/paginator.xhtml">
-				<ui:param name="paginatorBean" value="#{itemController}"/>
+				<ui:param name="paginatorBean" value="#{produtoController}"/>
 			</ui:include>
 		</h:form>
 	</ui:define>

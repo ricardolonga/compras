@@ -41,6 +41,9 @@ public abstract class BaseEntity<T extends BaseEntity<?>> implements IEntity<T> 
     public abstract int hashCode();
 
     @Override
+    public abstract String toString();
+
+    @Override
     @SuppressWarnings("unchecked")
     public boolean equals(final Object other) {
         if (this == other)

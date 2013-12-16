@@ -4,25 +4,18 @@ import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Embeddable
+@SuppressWarnings("serial")
 @Access(AccessType.PROPERTY)
 public class Descricao extends BaseValueObject<Descricao> {
 
-    private static final long serialVersionUID = -6828614119310310055L;
+    private String texto = "";
 
-    private String texto;
-
-    Descricao() {}
-
-    public static Descricao newInstance() {
-        return new Descricao();
-    }
-
-    @NotNull
+    @NotEmpty
     @Column(name = "descricao", nullable = false)
     public String getTexto() {
         return texto;

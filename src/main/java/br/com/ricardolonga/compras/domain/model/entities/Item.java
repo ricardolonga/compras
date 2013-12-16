@@ -1,43 +1,37 @@
 package br.com.ricardolonga.compras.domain.model.entities;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import br.com.ricardolonga.compras.domain.model.valueobjects.Descricao;
-import br.com.ricardolonga.compras.domain.model.valueobjects.Imagem;
-import br.com.ricardolonga.compras.domain.model.valueobjects.Valor;
-
 @Entity
 @Table(name = "itens")
+@SuppressWarnings("serial")
+@Access(AccessType.PROPERTY)
 public class Item extends BaseEntity<Item> {
 
-    private static final long serialVersionUID = 1L;
-
-    private Descricao descricao = Descricao.newInstance();
+    private Produto produto;
 
     private int quantidade;
 
-    private Imagem imagem;
+    private boolean adicionadoNoCarrinho;
 
-    private Valor valorUnitario = Valor.newInstance();
+    private Lista lista;
 
-    Item() {}
-
-    public static Item newInstance() {
-        return new Item();
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    public Produto getProduto() {
+        return this.produto;
     }
 
-    @Embedded
-    public Descricao getDescricao() {
-        return this.descricao;
-    }
-
-    public void setDescricao(Descricao descricao) {
-        this.descricao = descricao;
+    public void setProduto(final Produto produto) {
+        this.produto = produto;
     }
 
     @Column
@@ -45,31 +39,39 @@ public class Item extends BaseEntity<Item> {
         return this.quantidade;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(final int quantidade) {
         this.quantidade = quantidade;
     }
 
-    @Embedded
-    public Imagem getImagem() {
-        return this.imagem;
+    @Column
+    public boolean getAdicionadoNoCarrinho() {
+        return this.adicionadoNoCarrinho;
     }
 
-    public void setImagem(Imagem imagem) {
-        this.imagem = imagem;
+    public void setAdicionadoNoCarrinho(final boolean adicionadoNoCarrinho) {
+        this.adicionadoNoCarrinho = adicionadoNoCarrinho;
     }
 
-    @Embedded
-    public Valor getValorUnitario() {
-        return this.valorUnitario;
+    @ManyToOne
+    public Lista getLista() {
+        return this.lista;
     }
 
-    public void setValorUnitario(Valor valorUnitario) {
-        this.valorUnitario = valorUnitario;
+    public void setLista(final Lista lista) {
+        this.lista = lista;
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(descricao).append(quantidade).append(imagem).append(valorUnitario).toHashCode();
+        return new HashCodeBuilder().append(id).append(produto).append(quantidade).append(adicionadoNoCarrinho).toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        String result = getClass().getSimpleName() + " ";
+        result += "produto: " + produto.getDescricao().getTexto();
+        result += ", quantidade: " + quantidade;
+        return result;
     }
 
 }

@@ -23,12 +23,12 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import br.com.ricardolonga.compras.domain.model.entities.Item;
+import br.com.ricardolonga.compras.domain.model.entities.Produto;
 
 @Named
 @Stateful
 @ConversationScoped
-public class ItemController extends AbstractController {
+public class ProdutoController extends AbstractController {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,9 +45,9 @@ public class ItemController extends AbstractController {
         this.id = id;
     }
 
-    private Item item;
+    private Produto item;
 
-    public Item getItem() {
+    public Produto getItem() {
         return this.item;
     }
 
@@ -78,8 +78,8 @@ public class ItemController extends AbstractController {
         }
     }
 
-    public Item findById(Long id) {
-        return this.entityManager.find(Item.class, id);
+    public Produto findById(Long id) {
+        return this.entityManager.find(Produto.class, id);
     }
 
     /*
@@ -106,7 +106,7 @@ public class ItemController extends AbstractController {
         this.conversation.end();
 
         try {
-            Item deletableEntity = findById(getId());
+            Produto deletableEntity = findById(getId());
 
             this.entityManager.remove(deletableEntity);
             this.entityManager.flush();
@@ -123,9 +123,9 @@ public class ItemController extends AbstractController {
      */
     private int page;
     private long count;
-    private List<Item> pageItems;
+    private List<Produto> pageItems;
 
-    private Item example = Item.newInstance();
+    private Produto example = Produto.newInstance();
 
     public int getPage() {
         return this.page;
@@ -139,11 +139,11 @@ public class ItemController extends AbstractController {
         return 10;
     }
 
-    public Item getExample() {
+    public Produto getExample() {
         return this.example;
     }
 
-    public void setExample(Item example) {
+    public void setExample(Produto example) {
         this.example = example;
     }
 
@@ -156,20 +156,20 @@ public class ItemController extends AbstractController {
 
         // Populate this.count
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        Root<Item> root = countCriteria.from(Item.class);
+        Root<Produto> root = countCriteria.from(Produto.class);
         countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
         this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
 
         // Populate this.pageItems
 
-        CriteriaQuery<Item> criteria = builder.createQuery(Item.class);
-        root = criteria.from(Item.class);
-        TypedQuery<Item> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
+        CriteriaQuery<Produto> criteria = builder.createQuery(Produto.class);
+        root = criteria.from(Produto.class);
+        TypedQuery<Produto> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
         query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
         this.pageItems = query.getResultList();
     }
 
-    private Predicate[] getSearchPredicates(Root<Item> root) {
+    private Predicate[] getSearchPredicates(Root<Produto> root) {
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         List<Predicate> predicatesList = new ArrayList<Predicate>();
 
@@ -181,7 +181,7 @@ public class ItemController extends AbstractController {
         return predicatesList.toArray(new Predicate[predicatesList.size()]);
     }
 
-    public List<Item> getPageItems() {
+    public List<Produto> getPageItems() {
         return this.pageItems;
     }
 
@@ -192,16 +192,16 @@ public class ItemController extends AbstractController {
     /*
      * Support listing and POSTing back Item entities (e.g. from inside an HtmlSelectOneMenu)
      */
-    public List<Item> getAll() {
-        CriteriaQuery<Item> criteria = this.entityManager.getCriteriaBuilder().createQuery(Item.class);
-        return this.entityManager.createQuery(criteria.select(criteria.from(Item.class))).getResultList();
+    public List<Produto> getAll() {
+        CriteriaQuery<Produto> criteria = this.entityManager.getCriteriaBuilder().createQuery(Produto.class);
+        return this.entityManager.createQuery(criteria.select(criteria.from(Produto.class))).getResultList();
     }
 
     @Resource
     private SessionContext sessionContext;
 
     public Converter getConverter() {
-        final ItemController ejbProxy = this.sessionContext.getBusinessObject(ItemController.class);
+        final ProdutoController ejbProxy = this.sessionContext.getBusinessObject(ProdutoController.class);
 
         return new Converter() {
             @Override
@@ -215,7 +215,7 @@ public class ItemController extends AbstractController {
                     return "";
                 }
 
-                return String.valueOf(((Item) value).getId());
+                return String.valueOf(((Produto) value).getId());
             }
         };
     }
@@ -223,15 +223,15 @@ public class ItemController extends AbstractController {
     /*
      * Support adding children to bidirectional, one-to-many tables
      */
-    private Item add = Item.newInstance();
+    private Produto add = Produto.newInstance();
 
-    public Item getAdd() {
+    public Produto getAdd() {
         return this.add;
     }
 
-    public Item getAdded() {
-        Item added = this.add;
-        this.add = Item.newInstance();
+    public Produto getAdded() {
+        Produto added = this.add;
+        this.add = Produto.newInstance();
         return added;
     }
 }

@@ -25,11 +25,6 @@ public class GenericDAO<T extends BaseEntity<?>> implements IGenericRepository<T
     }
 
     @Override
-    public void update(T entity) {
-        entityManager.persist(entityManager.merge(entity));
-    }
-
-    @Override
     public void persist(T entity) {
         entityManager.persist(entityManager.merge(entity));
     }

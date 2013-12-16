@@ -17,8 +17,8 @@
 	</developers>
 	<properties>
 		<version.junit>4.11</version.junit>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.7</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<version.arquillian_core>1.1.2.Final</version.arquillian_core>
 	</properties>
@@ -84,6 +84,11 @@
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
 			<version>4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.ws.rs</groupId>
+			<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<repositories>

@@ -10,7 +10,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import br.com.ricardolonga.compras.domain.model.entities.Item;
+import br.com.ricardolonga.compras.domain.model.entities.Produto;
 import br.com.ricardolonga.compras.domain.model.valueobjects.Descricao;
 import br.com.ricardolonga.compras.domain.repositories.IGenericRepository;
 import br.com.ricardolonga.compras.domain.services.ItemService;
@@ -30,7 +30,7 @@ public class ItemTest {
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class) //
-                .addPackages(true, Item.class.getPackage(), Descricao.class.getPackage(), LoggerProducer.class.getPackage()) //
+                .addPackages(true, Produto.class.getPackage(), Descricao.class.getPackage(), LoggerProducer.class.getPackage()) //
                 .addClass(ItemService.class) //
                 .addClasses(ItemDAO.class, GenericDAO.class, IGenericRepository.class) //
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml") //
@@ -57,7 +57,7 @@ public class ItemTest {
 
     @Test
     public void guardar_um_novo_item() {
-        Item item = Item.newInstance();
+        Produto item = Produto.newInstance();
         itemRepository.persist(item);
     }
 
