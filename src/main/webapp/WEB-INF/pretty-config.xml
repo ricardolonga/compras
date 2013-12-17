@@ -7,8 +7,8 @@
 	<!--   DEFAULT PAGES   --> 
 	<!-- ================= -->
 	
-	<url-mapping id="home">
-		<pattern value="/home" />
+	<url-mapping id="inicial">
+		<pattern value="/inicial" />
 		<view-id>/index.jsf</view-id>
 	</url-mapping>
 
@@ -16,24 +16,24 @@
 	<!--   PRODUTO CRUD   --> 
 	<!-- ================ -->
 	
-	<url-mapping id="produto-search">
+	<url-mapping id="visualizar-produtos">
 		<pattern value="/visualizar/produtos" />
-		<view-id>/produto/search.jsf</view-id>
+		<view-id>/produto/consultarProduto.jsf</view-id>
 	</url-mapping>
 
-	<url-mapping id="produto-view">
+	<url-mapping id="visualizar-produto">
 		<pattern value="/visualizar/produto/#{id}" />
-		<view-id>/produto/view.jsf</view-id>
+		<view-id>/produto/visualizarProduto.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="produto-edit">
+	<url-mapping id="alterar-produto">
 		<pattern value="/alterar/produto/#{id}" />
-		<view-id>/produto/create.jsf</view-id>
+		<view-id>/produto/cadastrarProduto.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="produto-create">
+	<url-mapping id="novo-produto">
 		<pattern value="/novo/produto" />
-		<view-id>/produto/create.jsf?faces-redirect=true</view-id>
+		<view-id>/produto/cadastrarProduto.jsf?faces-redirect=true</view-id>
 	</url-mapping>
 	
 	<!-- ============== -->

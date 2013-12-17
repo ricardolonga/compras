@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{produtoController.id}"/>
+		<f:event type="preRenderView" listener="#{produtoController.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="#{msg['title.visualizar_produto']}"/>
+
+	<ui:define name="header">#{msg['title.visualizar_produto']}</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
+			<h:outputText id="descricao" value="#{produtoController.produto.descricao.texto}"/>
+			<h:outputText/>
+						
+			<h:outputLabel for="valor" value="#{msg['label.valor_unitario']}:"/>
+			<h:outputText id="valor" value="#{produtoController.produto.valorUnitario.valor}" converter="valorMonetarioConverter" />
+			<h:outputText/>
+			
+			<h:outputLabel for="imagem" value="#{msg['label.imagem']}:"/>
+			<p:graphicImage id="imagem" value="#{produtoController.fotoStreamed}" width="700" height="800"/>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="#{msg['button.voltar']}" outcome="pretty:visualizar-produtos" styleClass="btn btn-primary"/> 
+			<h:link value="#{msg['button.editar']}" outcome="pretty:alterar-produto" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="#{msg['button.novo']}" outcome="pretty:novo-produto" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"	
+	xmlns:p="http://primefaces.org/ui"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{produtoController.id}"/>
+		<f:event type="preRenderView" listener="#{produtoController.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="#{msg['title.novo_produto']}"/>
+
+	<ui:define name="header">#{msg['title.novo_produto']}</ui:define>
+
+	<ui:define name="subheader">
+		<c:choose>
+			<c:when test="#{!empty produtoController.id}">
+				#{msg['msg.editando_produto']}
+			</c:when>
+			<c:otherwise>
+				#{msg['msg.criando_produto']}
+			</c:otherwise>
+		</c:choose>
+	</ui:define>
+
+	<ui:define name="main">
+		<h:form id="create" enctype="multipart/form-data">
+			<h:messages globalOnly="true" styleClass="error"/>
+
+			<h:panelGrid columnClasses="label,component,required" columns="3">
+				<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
+				<h:panelGroup>
+					<h:inputText id="descricao" value="#{produtoController.produto.descricao.texto}"/>
+					<h:message for="descricao" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				
+				<h:outputLabel for="imagem" value="#{msg['label.imagem']}:"/>
+				<h:panelGroup>
+					<p:fileUpload value="#{produtoController.imagem}" mode="simple" />
+					<h:message id="imagemMensagem" for="imagem" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				
+				<h:outputLabel for="valorUnitario" value="#{msg['label.valor_unitario']}:"/>
+				<h:panelGroup>
+					<h:inputText id="valorUnitario" value="#{produtoController.produto.valorUnitario.valor}" converter="valorMonetarioConverter" />
+					<h:message for="valorUnitario" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+			</h:panelGrid>
+
+			<div class="buttons">
+				<c:choose>
+					<c:when test="#{empty produtoController.id}">
+						<h:link value="#{msg['button.cancelar']}" outcome="pretty:visualizar-produtos" styleClass="btn btn-primary"/>
+					</c:when>
+					<c:otherwise>
+						<h:link value="#{msg['button.cancelar']}" outcome="pretty:visualizar-produto" styleClass="btn btn-primary">
+							<f:param name="id" value="#{produtoController.id}"/>
+						</h:link>
+						<h:commandLink value="#{msg['button.excluir']}" action="#{produtoController.excluir()}" styleClass="btn btn-primary"/>
+					</c:otherwise>
+				</c:choose>
+
+				<p:commandButton value="#{msg['button.salvar']}" action="#{produtoController.atualizar()}" ajax="false" styleClass="btn btn-primary"/>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

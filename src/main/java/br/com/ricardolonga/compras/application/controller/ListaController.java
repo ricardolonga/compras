@@ -124,7 +124,7 @@ public class ListaController extends AbstractController {
     private long count;
     private List<Lista> pageItems;
 
-    private Lista example = Lista.newInstance();
+    private Lista example = new Lista();
 
     public int getPage() {
         return this.page;
@@ -223,7 +223,7 @@ public class ListaController extends AbstractController {
     /*
      * Support adding children to bidirectional, one-to-many tables
      */
-    private Lista add = Lista.newInstance();
+    private Lista add = new Lista();
 
     public Lista getAdd() {
         return this.add;
@@ -231,7 +231,7 @@ public class ListaController extends AbstractController {
 
     public Lista getAdded() {
         Lista added = this.add;
-        this.add = Lista.newInstance();
+        this.add = new Lista();
         return added;
     }
 }

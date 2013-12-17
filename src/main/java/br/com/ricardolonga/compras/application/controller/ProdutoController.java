@@ -1,5 +1,6 @@
 package br.com.ricardolonga.compras.application.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
+
+import br.com.ricardolonga.compras.application.utils.UIParameterBuilder;
 import br.com.ricardolonga.compras.domain.model.entities.Produto;
+import br.com.ricardolonga.compras.domain.model.valueobjects.Imagem;
 
 @Named
 @Stateful
@@ -33,7 +40,7 @@ public class ProdutoController extends AbstractController {
     private static final long serialVersionUID = 1L;
 
     /*
-     * Support creating and retrieving Item entities
+     * Support creating and retrieving Produto entities
      */
     private Long id;
 
@@ -45,10 +52,10 @@ public class ProdutoController extends AbstractController {
         this.id = id;
     }
 
-    private Produto item;
+    private Produto produto;
 
-    public Produto getItem() {
-        return this.item;
+    public Produto getProduto() {
+        return this.produto;
     }
 
     @Inject
@@ -57,9 +64,9 @@ public class ProdutoController extends AbstractController {
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
 
-    public String create() {
+    public void novo() {
         this.conversation.begin();
-        return "pretty:item-create";
+        redirect("novo-produto");
     }
 
     public void retrieve() {
@@ -72,37 +79,60 @@ public class ProdutoController extends AbstractController {
         }
 
         if (this.id == null) {
-            this.item = this.example;
+            this.produto = this.filtro;
         } else {
-            this.item = findById(getId());
+            this.produto = findById(getId());
         }
+    }
+
+    private UploadedFile imagem;
+
+    public void setImagem(UploadedFile imagem) {
+        this.imagem = imagem;
+    }
+
+    public UploadedFile getImagem() {
+        return this.imagem;
     }
 
     public Produto findById(Long id) {
         return this.entityManager.find(Produto.class, id);
     }
 
+    private StreamedContent graphicText;
+
+    /**
+     * Esse método é usado pra fazer a imagem ser exibida na tela.
+     */
+    public StreamedContent getFotoStreamed() {
+        return new DefaultStreamedContent(new ByteArrayInputStream(this.produto.getImagem().getConteudo()));
+    }
+
     /*
      * Support updating and deleting Item entities
      */
-    public String update() {
+    public void atualizar() {
         this.conversation.end();
+
+        Imagem imagem_ = new Imagem();
+        imagem_.setConteudo(imagem.getContents());
+        this.produto.setImagem(imagem_);
 
         try {
             if (this.id == null) {
-                this.entityManager.persist(this.item);
-                return "search?faces-redirect=true";
+                this.entityManager.persist(this.produto);
+                redirect("visualizar-produtos");
             } else {
-                this.entityManager.merge(this.item);
-                return "view?faces-redirect=true&id=" + this.item.getId();
+                this.entityManager.merge(this.produto);
+                redirect("visualizar-produto", UIParameterBuilder.create().id("id").value(this.produto.getId()).build());
             }
         } catch (Exception e) {
+            addErrorMessage(e.getMessage());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-            return null;
         }
     }
 
-    public String delete() {
+    public void excluir() {
         this.conversation.end();
 
         try {
@@ -111,10 +141,9 @@ public class ProdutoController extends AbstractController {
             this.entityManager.remove(deletableEntity);
             this.entityManager.flush();
 
-            return "search?faces-redirect=true";
+            redirect("visualizar-produtos");
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-            return null;
         }
     }
 
@@ -125,7 +154,7 @@ public class ProdutoController extends AbstractController {
     private long count;
     private List<Produto> pageItems;
 
-    private Produto example = Produto.newInstance();
+    private Produto filtro = new Produto();
 
     public int getPage() {
         return this.page;
@@ -139,15 +168,15 @@ public class ProdutoController extends AbstractController {
         return 10;
     }
 
-    public Produto getExample() {
-        return this.example;
+    public Produto getFiltro() {
+        return this.filtro;
     }
 
-    public void setExample(Produto example) {
-        this.example = example;
+    public void setFiltro(Produto filtro) {
+        this.filtro = filtro;
     }
 
-    public void search() {
+    public void pesquisar() {
         this.page = 0;
     }
 
@@ -173,10 +202,10 @@ public class ProdutoController extends AbstractController {
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-        int quantidade = this.example.getQuantidade();
-        if (quantidade != 0) {
-            predicatesList.add(builder.equal(root.get("quantidade"), quantidade));
-        }
+        // String descricao = this.example.getDescricao().getTexto();
+        // if (descricao != null && !descricao.trim().isEmpty()) {
+        // predicatesList.add(builder.like(root.get("descricao.texto"), descricao));
+        // }
 
         return predicatesList.toArray(new Predicate[predicatesList.size()]);
     }
@@ -223,7 +252,7 @@ public class ProdutoController extends AbstractController {
     /*
      * Support adding children to bidirectional, one-to-many tables
      */
-    private Produto add = Produto.newInstance();
+    private Produto add = new Produto();
 
     public Produto getAdd() {
         return this.add;
@@ -231,7 +260,7 @@ public class ProdutoController extends AbstractController {
 
     public Produto getAdded() {
         Produto added = this.add;
-        this.add = Produto.newInstance();
+        this.add = new Produto();
         return added;
     }
 }

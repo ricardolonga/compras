@@ -14,23 +14,23 @@
 		<div class="navbar navbar-fixed-top">
 			<div class="navbar-inner">
 				<div class="container">
-					<h:link id="brandLink" outcome="pretty:home" styleClass="brand">Compras</h:link>
+					<h:link id="brandLink" outcome="pretty:inicial" styleClass="brand">Compras</h:link>
 				</div>
 			</div>
 		</div>
 	
 		<div class="container forgecontainer">
 			<div id="navigation">
-				<h:link id="homeLink" outcome="pretty:home">
+				<h:link id="homeLink" outcome="pretty:inicial">
 					<img src="#{resource['forge-logo.png']}" border="0" />
 				</h:link>
 				
 				<ul>
-					<li><h:link outcome="pretty:produtos-search" value="#{msg['menu.produtos']}" /></li>
+					<li><h:link outcome="pretty:visualizar-produtos" value="#{msg['menu.produtos']}" /></li>
 				</ul>
-				<ul>
-					<li><h:link outcome="pretty:lista-search" value="#{msg['menu.listas']}" /></li>
-				</ul>
+<!-- 				<ul> -->
+<!-- 					<li><h:link outcome="pretty:lista-search" value="#{msg['menu.listas']}" /></li> -->
+<!-- 				</ul> -->
 			</div>
 	
 			<div id="content">
