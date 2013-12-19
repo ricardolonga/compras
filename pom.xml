@@ -8,6 +8,7 @@
 	<version>1.0</version>
 	<packaging>war</packaging>
 	<name>compras</name>
+	
 	<developers>
 		<developer>
 			<name>Ricardo Longa</name>
@@ -15,6 +16,7 @@
 			<url>http://www.ricardolonga.com.br</url>
 		</developer>
 	</developers>
+	
 	<properties>
 		<version.junit>4.11</version.junit>
 		<maven.compiler.source>1.7</maven.compiler.source>
@@ -22,30 +24,39 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<version.arquillian_core>1.1.2.Final</version.arquillian_core>
 	</properties>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.jboss.spec</groupId>
-				<artifactId>jboss-javaee-6.0</artifactId>
+				<artifactId>jboss-javaee-web-6.0</artifactId>
 				<version>3.0.2.Final</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
 				<version>${version.arquillian_core}</version>
 				<type>pom</type>
-				<scope>import</scope>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
 	<dependencies>
 		<dependency>
-			<groupId>org.jboss.spec</groupId>
-			<artifactId>jboss-javaee-6.0</artifactId>
-			<version>1.0.0.Final</version>
-			<type>pom</type>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+	
+		<!-- Spec Java EE 6 -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.0_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -54,26 +65,17 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.jboss.spec.javax.ws.rs</groupId>
+			<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Others -->
+		<dependency>
 			<groupId>org.jboss.logging</groupId>
 			<artifactId>jboss-logging</artifactId>
 			<version>3.1.3.GA</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${version.junit}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>com.ocpsoft</groupId>
@@ -86,27 +88,48 @@
 			<version>4.0</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.spec.javax.ws.rs</groupId>
-			<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-fileupload</groupId>
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.3</version>
 		</dependency>
+
+		<!-- Tests -->
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<version>1.1.2.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${version.junit}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+	
 	<repositories>
 		<repository>
 			<id>Prime Technology Maven Repository</id>
 			<url>http://repository.primefaces.org</url>
 		</repository>
+		
+		<repository>
+			<id>JBoss Maven Repository</id>
+			<url>http://maven.repository.redhat.com/techpreview/all</url>
+		</repository>
 	</repositories>
+	
 	<profiles>
 		<profile>
 			<id>openshift</id>
@@ -124,6 +147,7 @@
 				</plugins>
 			</build>
 		</profile>
+		
 		<profile>
 			<id>arq-jboss_as_remote_7.x</id>
 			<activation>

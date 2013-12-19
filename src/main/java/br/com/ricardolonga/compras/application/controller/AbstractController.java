@@ -36,6 +36,10 @@ public class AbstractController implements Serializable {
     @Inject
     protected FacesContext facesContext;
 
+    @Inject
+    @MessageBundle
+    protected transient ResourceBundle bundle;
+
     // =========== //
     // PrettyFaces //
     // =========== //
@@ -58,10 +62,6 @@ public class AbstractController implements Serializable {
     // ============== //
     // ResourceBundle //
     // ============== //
-
-    @Inject
-    @MessageBundle
-    protected transient ResourceBundle bundle;
 
     /**
      * Utilizado para obter a mensagem do ResourceBundle.
@@ -142,36 +142,30 @@ public class AbstractController implements Serializable {
         facesContext.addMessage(componentId, new FacesMessage(severidade, mensagem, mensagem));
     }
 
+    protected boolean containsErrorOrWarnMessages() {
+        return containsErrorMessages() || containsWarnMessages();
+    }
+
     protected boolean containsWarnMessages() {
-        if (facesContext.getMessageList().isEmpty()) {
-            return false;
-        }
-
-        for (FacesMessage message : facesContext.getMessageList()) {
-            if (message.getSeverity().equals(FacesMessage.SEVERITY_WARN)) {
-                return true;
-            }
-        }
-
-        return false;
+        return contains(FacesMessage.SEVERITY_WARN);
     }
 
     protected boolean containsErrorMessages() {
+        return contains(FacesMessage.SEVERITY_ERROR);
+    }
+
+    private boolean contains(Severity severity) {
         if (facesContext.getMessageList().isEmpty()) {
             return false;
         }
 
         for (FacesMessage message : facesContext.getMessageList()) {
-            if (message.getSeverity().equals(FacesMessage.SEVERITY_ERROR)) {
+            if (message.getSeverity().equals(severity)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    protected boolean containsErrorOrWarnMessages() {
-        return containsErrorMessages() || containsWarnMessages();
     }
 
 }
