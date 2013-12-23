@@ -59,5 +59,25 @@
 		<pattern value="/novo/lista" />
 		<view-id>/lista/create.jsf?faces-redirect=true</view-id>
 	</url-mapping>
-			
+	
+	<!-- ========== -->
+	<!--   IMAGEM   --> 
+	<!-- ========== -->
+
+<!-- 
+	<url-mapping id="visualizar-imagens">
+		<pattern value="/visualizar/imagens" />
+		<view-id>/imagem/consultarImagem.jsf</view-id>
+	</url-mapping> -->
+	
+	<url-mapping id="nova-imagem">
+		<pattern value="/nova/imagem" />
+		<view-id>/imagem/cadastrarImagem.jsf?editar=false</view-id>
+	</url-mapping>
+
+	<url-mapping id="alterar-imagem">
+		<pattern value="/alterar/imagem" />
+		<view-id>/imagem/cadastrarImagem.jsf?editar=true</view-id>
+	</url-mapping>
+		
 </pretty-config>

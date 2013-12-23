@@ -9,7 +9,6 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
 
 import org.primefaces.model.DefaultStreamedContent;
@@ -21,22 +20,25 @@ public class ImagemController implements Serializable {
 
     private static final long serialVersionUID = -4953253518112250551L;
 
-    private StreamedContent imageStream;
+    private StreamedContent streamedImage;
 
-    public StreamedContent getImageStream() {
-        byte[] imagemArray = (byte[]) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("imagem");
+    public StreamedContent getStreamedImage() {
+        byte[] imagemArray = null/*
+                                  * (byte[])
+                                  * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("imagem")
+                                  */;
 
         if (imagemArray == null) {
             imagemArray = criaPNGBranco();
         }
 
-        imageStream = new DefaultStreamedContent(new ByteArrayInputStream(imagemArray), "image/png");
+        streamedImage = new DefaultStreamedContent(new ByteArrayInputStream(imagemArray), "image/png");
 
-        return imageStream;
+        return streamedImage;
     }
 
-    public void setImageStream(StreamedContent imageStream) {
-        this.imageStream = imageStream;
+    public void setStreamedImage(StreamedContent streamedImage) {
+        this.streamedImage = streamedImage;
     }
 
     private byte[] criaPNGBranco() {
