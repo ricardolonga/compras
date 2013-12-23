@@ -33,8 +33,8 @@ public class AbstractController implements Serializable {
     @Inject
     private Logger logger;
 
-    @Inject
-    protected FacesContext facesContext;
+    // @Inject
+    // protected FacesContext facesContext;
 
     @Inject
     @MessageBundle
@@ -45,15 +45,16 @@ public class AbstractController implements Serializable {
     // =========== //
 
     protected void redirect(String target, UIParameter... params) {
-        HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
+        HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         PrettyContext context = PrettyContext.getCurrentInstance(request);
 
         UrlMapping mapping = context.getConfig().getMappingById(target);
         String targetURL = new PrettyURLBuilder().build(mapping, true, Arrays.asList(params));
 
         try {
-            facesContext.getExternalContext().redirect("/compras" + targetURL);
-            facesContext.responseComplete();
+            FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
+            FacesContext.getCurrentInstance().getExternalContext().redirect("/compras" + targetURL);
+            FacesContext.getCurrentInstance().responseComplete();
         } catch (IOException e) {
             logger.error(e);
         }
@@ -139,7 +140,7 @@ public class AbstractController implements Serializable {
     }
 
     private void addMessage(String mensagem, String componentId, Severity severidade) {
-        facesContext.addMessage(componentId, new FacesMessage(severidade, mensagem, mensagem));
+        FacesContext.getCurrentInstance().addMessage(componentId, new FacesMessage(severidade, mensagem, mensagem));
     }
 
     protected boolean containsErrorOrWarnMessages() {
@@ -155,11 +156,11 @@ public class AbstractController implements Serializable {
     }
 
     private boolean contains(Severity severity) {
-        if (facesContext.getMessageList().isEmpty()) {
+        if (FacesContext.getCurrentInstance().getMessageList().isEmpty()) {
             return false;
         }
 
-        for (FacesMessage message : facesContext.getMessageList()) {
+        for (FacesMessage message : FacesContext.getCurrentInstance().getMessageList()) {
             if (message.getSeverity().equals(severity)) {
                 return true;
             }

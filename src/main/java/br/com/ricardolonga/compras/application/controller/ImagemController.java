@@ -5,12 +5,16 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
+import javax.inject.Inject;
 
+import org.jboss.logging.Logger;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -20,13 +24,13 @@ public class ImagemController implements Serializable {
 
     private static final long serialVersionUID = -4953253518112250551L;
 
+    @Inject
+    private Logger logger;
+
     private StreamedContent streamedImage;
 
     public StreamedContent getStreamedImage() {
-        byte[] imagemArray = null/*
-                                  * (byte[])
-                                  * FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("imagem")
-                                  */;
+        byte[] imagemArray = (byte[]) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("imagem");
 
         if (imagemArray == null) {
             imagemArray = criaPNGBranco();
@@ -43,29 +47,29 @@ public class ImagemController implements Serializable {
 
     private byte[] criaPNGBranco() {
         ByteArrayOutputStream imgOutputStream = new ByteArrayOutputStream();
-        byte[] captchaBytes = null; // imageBytes
-        String sImgType = "png";
+        byte[] imageBytes = null;
+        String extension = "png";
 
         int width = 20;
         int height = 20;
 
         try {
-            BufferedImage bufImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+            BufferedImage buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-            Graphics2D g2d = bufImage.createGraphics();
+            Graphics2D g2d = buffer.createGraphics();
 
             g2d.setColor(Color.WHITE);
             g2d.fillRect(0, 0, width, height);
 
             g2d.dispose();
 
-            ImageIO.write(bufImage, sImgType, imgOutputStream);
-            captchaBytes = imgOutputStream.toByteArray();
-        } catch (Exception e) {
-            System.err.println("Image failed #0001 ");
+            ImageIO.write(buffer, extension, imgOutputStream);
+            imageBytes = imgOutputStream.toByteArray();
+        } catch (IOException e) {
+            logger.error("Erro ao criar o PNG em branco.", e);
         }
 
-        return captchaBytes;
+        return imageBytes;
     }
 
 }

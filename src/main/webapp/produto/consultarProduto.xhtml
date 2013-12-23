@@ -4,6 +4,7 @@
 				xmlns:h="http://java.sun.com/jsf/html"
 				xmlns:f="http://java.sun.com/jsf/core"
 				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
 				template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
@@ -19,13 +20,9 @@
 		<h:form id="search">
 			<f:validateBean disabled="true">
 				<h:panelGroup styleClass="search">
-					<h:panelGrid columnClasses="label,component,required" columns="3">
+					<h:panelGrid columnClasses="label, component" columns="2">
 						<h:outputLabel for="descricao" value="#{msg['label.descricao']}:" />
-						<h:panelGroup>
-							<h:inputText id="descricao" value="#{produtoController.filtro.descricao.texto}" />
-							<h:message for="descricao" styleClass="error"/>
-						</h:panelGroup>
-						<h:outputText/>
+						<h:inputText id="descricao" value="#{produtoController.filtro.descricao.texto}" />
 					</h:panelGrid>
 					
 					<h:panelGroup styleClass="buttons">
@@ -60,7 +57,7 @@
 			</h:dataTable>
 			
 			<ui:include src="/resources/scaffold/paginator.xhtml">
-				<ui:param name="paginatorBean" value="#{produtoController}"/>
+				<ui:param name="paginatorBean" value="#{produtoController}" />
 			</ui:include>
 		</h:form>
 	</ui:define>

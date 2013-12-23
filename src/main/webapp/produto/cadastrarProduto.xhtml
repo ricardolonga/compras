@@ -30,32 +30,18 @@
 
 	<ui:define name="main">
 		<h:form id="create" enctype="multipart/form-data">
-			<h:messages globalOnly="true" styleClass="error"/>
-
-			<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:panelGrid columnClasses="label,component" columns="2">
 				<h:outputLabel for="descricao" value="#{msg['label.descricao']}:"/>
-				<h:panelGroup>
-					<h:inputText id="descricao" value="#{produtoController.produto.descricao.texto}"/>
-					<h:message for="descricao" styleClass="error"/>
-				</h:panelGroup>
-				<h:outputText/>
+				<h:inputText id="descricao" value="#{produtoController.produto.descricao.texto}"/>
 				
 				<h:outputLabel for="imagem" value="#{msg['label.imagem']}:"/>
-				<h:panelGroup>
-					<p:fileUpload value="#{produtoController.imagem}" mode="simple" />
-					<h:message id="imagemMensagem" for="imagem" styleClass="error"/>
-				</h:panelGroup>
-				<h:outputText/>
+				<p:fileUpload id="imagem" value="#{produtoController.imagemCarregada}" mode="simple" />
 				
 				<h:outputLabel for="valorUnitario" value="#{msg['label.valor_unitario']}:"/>
-				<h:panelGroup>
-					<h:inputText id="valorUnitario" value="#{produtoController.produto.valorUnitario.valor}" converter="valorMonetarioConverter" />
-					<h:message for="valorUnitario" styleClass="error"/>
-				</h:panelGroup>
-				<h:outputText/>
+				<h:inputText id="valorUnitario" value="#{produtoController.produto.valorUnitario.valor}" converter="valorMonetarioConverter" />
 			</h:panelGrid>
 
-			<div class="buttons">
+			<h:panelGroup styleClass="buttons">
 				<c:choose>
 					<c:when test="#{empty produtoController.id}">
 						<h:link value="#{msg['button.cancelar']}" outcome="pretty:visualizar-produtos" styleClass="btn btn-primary"/>
@@ -68,8 +54,8 @@
 					</c:otherwise>
 				</c:choose>
 
-				<p:commandButton value="#{msg['button.salvar']}" action="#{produtoController.atualizar()}" ajax="false" styleClass="btn btn-primary"/>
-			</div>
+				<h:commandButton value="#{msg['button.salvar']}" action="#{produtoController.atualizar()}" ajax="false" styleClass="btn btn-primary"/>
+			</h:panelGroup>
 		</h:form>
 	</ui:define>
 

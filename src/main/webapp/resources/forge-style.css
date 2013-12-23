@@ -253,7 +253,7 @@ footer p {
 #content table .label {
 	width: 25%;
 	text-align: left;
-	vertical-align: top;
+	vertical-align: bottom;
 	white-space: nowrap;
 }
 
@@ -462,7 +462,6 @@ input[type="color"],
 /* Label */
 .label {
 	background-color:transparent;
-	text-shadow:0 1px 0 #EFEFEF;
 	color:#41484A;
 }
 label {

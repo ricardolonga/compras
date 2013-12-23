@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -25,7 +24,6 @@ import br.com.ricardolonga.compras.domain.model.valueobjects.Imagem;
 import br.com.ricardolonga.compras.domain.repositories.IProdutoRepository;
 
 @Named
-// @Stateful
 @ConversationScoped
 public class ProdutoController extends AbstractController {
 
@@ -40,14 +38,11 @@ public class ProdutoController extends AbstractController {
     @Inject
     private IProdutoRepository produtoRepository;
 
-    // @Resource
-    // private SessionContext sessionContext;
-
     private Long id;
 
     private Produto produto;
 
-    private UploadedFile imagem;
+    private UploadedFile imagemCarregada;
 
     private int page;
     private long count;
@@ -76,6 +71,7 @@ public class ProdutoController extends AbstractController {
         if (this.id == null) {
             this.produto = this.filtro;
         } else {
+            imagemCarregada = null;
             this.produto = findById(getId());
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("imagem", this.produto.getImagem().getConteudo());
         }
@@ -83,29 +79,29 @@ public class ProdutoController extends AbstractController {
 
     public Produto findById(Long id) {
         return produtoRepository.findById(id);
-        // return this.entityManager.find(Produto.class, id);
     }
 
     public void atualizar() {
         this.conversation.end();
 
-        Imagem imagem_ = new Imagem();
-        imagem_.setConteudo(imagem.getContents());
-        this.produto.setImagem(imagem_);
+        if (imagemCarregada != null) {
+            Imagem imagem = new Imagem();
+            imagem.setConteudo(imagemCarregada.getContents());
+            this.produto.setImagem(imagem);
+        }
 
         try {
+            produtoRepository.persist(produto);
+
             if (this.id == null) {
-                produtoRepository.persist(produto);
-                // this.entityManager.persist(this.produto);
+                addInfoMessage(getMessageFromBundle("msg.cadastro_realizado_com_sucesso"));
                 redirect("visualizar-produtos");
             } else {
-                produtoRepository.persist(produto);
-                // this.entityManager.merge(this.produto);
+                addInfoMessage(getMessageFromBundle("msg.atualizacao_realizada_com_sucesso"));
                 redirect("visualizar-produto", UIParameterBuilder.create().id("id").value(this.produto.getId()).build());
             }
         } catch (Exception e) {
             addErrorMessage(e.getMessage());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
         }
     }
 
@@ -116,12 +112,10 @@ public class ProdutoController extends AbstractController {
             Produto deletableEntity = findById(getId());
 
             produtoRepository.remove(deletableEntity);
-            // this.entityManager.remove(deletableEntity);
-            // this.entityManager.flush();
 
             redirect("visualizar-produtos");
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            addErrorMessage(e.getMessage());
         }
     }
 
@@ -176,12 +170,12 @@ public class ProdutoController extends AbstractController {
         return this.produto;
     }
 
-    public void setImagem(UploadedFile imagem) {
-        this.imagem = imagem;
+    public void setImagemCarregada(UploadedFile imagemCarregada) {
+        this.imagemCarregada = imagemCarregada;
     }
 
-    public UploadedFile getImagem() {
-        return this.imagem;
+    public UploadedFile getImagemCarregada() {
+        return this.imagemCarregada;
     }
 
     public int getPage() {
@@ -193,7 +187,7 @@ public class ProdutoController extends AbstractController {
     }
 
     public int getPageSize() {
-        return 10;
+        return 2;
     }
 
     public Produto getFiltro() {
@@ -215,29 +209,5 @@ public class ProdutoController extends AbstractController {
     public long getCount() {
         return this.count;
     }
-
-    // ========= //
-    // Converter //
-    // ========= //
-
-    // public Converter getConverter() {
-    // final ProdutoController ejbProxy = this.sessionContext.getBusinessObject(ProdutoController.class);
-    //
-    // return new Converter() {
-    // @Override
-    // public Object getAsObject(FacesContext context, UIComponent component, String value) {
-    // return ejbProxy.findById(Long.valueOf(value));
-    // }
-    //
-    // @Override
-    // public String getAsString(FacesContext context, UIComponent component, Object value) {
-    // if (value == null) {
-    // return "";
-    // }
-    //
-    // return String.valueOf(((Produto) value).getId());
-    // }
-    // };
-    // }
 
 }

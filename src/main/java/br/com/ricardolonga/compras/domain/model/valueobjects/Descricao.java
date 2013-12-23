@@ -15,7 +15,7 @@ public class Descricao extends BaseValueObject<Descricao> {
 
     private String texto = "";
 
-    @NotEmpty
+    @NotEmpty(message = "A descrição deve ser preenchida")
     @Column(name = "descricao", nullable = false)
     public String getTexto() {
         return texto;
