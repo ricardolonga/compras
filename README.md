@@ -45,7 +45,7 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 
 ### Domain diagram
 ---
-![Domain diagram](https://github.com/ricardolonga/compras/blob/master/docs/ClassDiagram.png "Domain diagram")
+![Domain diagram](https://github.com/ricardolonga/compras/blob/master/docs/ClassDiagram.png?raw=true "Domain diagram")
 
 ### Autor
 ---
