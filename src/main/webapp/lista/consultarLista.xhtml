@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.org/ui"
+				template="/resources/scaffold/template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="page" value="#{listaController.page}"/>
+		<f:event type="preRenderView" listener="#{listaController.paginate}" />
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="#{msg['title.consulta_listas']}" />
+
+	<ui:define name="header">#{msg['title.consulta_listas']}</ui:define>
+
+	<ui:define name="main">
+		<h:form id="search">
+			<f:validateBean disabled="true">
+				<h:panelGroup styleClass="search">
+					<h:panelGrid columnClasses="label, component" columns="2">
+						<h:outputLabel for="descricao" value="#{msg['label.descricao']}:" />
+						<h:inputText id="descricao" value="#{listaController.filtro.descricao.texto}" />
+					</h:panelGrid>
+					
+					<h:panelGroup styleClass="buttons">
+						<h:commandLink value="#{msg['button.novo']}" action="#{listaController.novo}" styleClass="btn btn-primary" />
+						<h:commandLink value="#{msg['button.pesquisar']}" action="#{listaController.pesquisar}" styleClass="btn btn-primary" />
+					</h:panelGroup>
+				</h:panelGroup>
+			</f:validateBean>
+			
+			<h:dataTable id="produtos" styleClass="data-table" value="#{listaController.pageItems}" var="_lista" rendered="#{!listaController.pageItems.isEmpty()}">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.descricao']}"/>
+					</f:facet>
+					
+					<h:link outcome="pretty:visualizar-lista">
+						<f:param name="id" value="#{_lista.id}"/>
+						<h:outputText id="listaDescricao" value="#{_lista.descricao.texto}"/>
+					</h:link>
+				</h:column>
+
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg['label.total']}"/>
+					</f:facet>
+					
+					<h:link outcome="pretty:visualizar-lista">
+						<f:param name="id" value="#{_lista.id}"/>
+						<h:outputText value="#{msg['label.simbolo_monetario']} " /><h:outputText id="total" value="#{_lista.total}" converter="valorMonetarioConverter" />
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			
+			<ui:include src="/resources/scaffold/paginator.xhtml">
+				<ui:param name="paginatorBean" value="#{listaController}" />
+			</ui:include>
+		</h:form>
+	</ui:define>
+</ui:composition>
