@@ -43,6 +43,10 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 * Apache CODI (JSF module for @ViewAccessScoped);
 * Behavior Driven Development.
 
+### Domain diagram
+---
+![Domain diagram](https://github.com/ricardolonga/compras/blob/master/docs/ClassDiagram.png "Domain diagram")
+
 ### Autor
 ---
 
