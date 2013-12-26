@@ -2,6 +2,7 @@ package br.com.ricardolonga.compras.tests.domain;
 
 import javax.inject.Inject;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -29,8 +30,8 @@ public class ListaServiceTest {
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap.create(WebArchive.class) //
-                .addPackages(true, Lista.class.getPackage(), Descricao.class.getPackage(), LoggerProducer.class.getPackage()) //
-                .addClasses(ListaDAO.class, GenericDAO.class, IListaRepository.class, IRepository.class) //
+                .addPackages(true, Lista.class.getPackage(), Descricao.class.getPackage(), LoggerProducer.class.getPackage(), EqualsBuilder.class.getPackage()) //
+                .addClasses(ListaDAO.class, ListaBuilder.class, GenericDAO.class, IListaRepository.class, IRepository.class) //
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml") //
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
