@@ -3,7 +3,7 @@
 
 Java Web Application for to management of the list buy's on supermarket.
 
-[![Build Status](https://travis-ci.org/ricardolonga/google-maps-directions.png?branch=master)](https://travis-ci.org/ricardolonga/google-maps-directions)
+[![Build Status](https://travis-ci.org/ricardolonga/compras.png?branch=master)](https://travis-ci.org/ricardolonga/compras)
 
 ### Deploy in 
 ---
