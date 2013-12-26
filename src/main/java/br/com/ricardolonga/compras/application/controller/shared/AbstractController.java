@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.application.controller;
+package br.com.ricardolonga.compras.application.controller.shared;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -14,15 +14,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.logging.Logger;
 
-import br.com.ricardolonga.compras.application.config.MessageBundle;
+import br.com.ricardolonga.compras.infrastructure.producers.Bundle;
 
 import com.ocpsoft.pretty.PrettyContext;
 import com.ocpsoft.pretty.faces.config.mapping.UrlMapping;
 import com.ocpsoft.pretty.faces.util.PrettyURLBuilder;
 
 /**
- * Superclasse para os ManagedBeans com métodos auxiliares para consultas em arquivos bundles e adições de mensagens
- * (info/warn/error) ao usuário.
+ * Superclasse para os ManagedBeans com métodos auxiliares para consultas em resourceBundles e adições de mensagens
+ * (info/warn/error) para o usuário.
  * 
  * @author Ricardo Longa
  */
@@ -31,13 +31,10 @@ public class AbstractController implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    private Logger logger;
-
-    // @Inject
-    // protected FacesContext facesContext;
+    protected Logger logger;
 
     @Inject
-    @MessageBundle
+    @Bundle
     protected transient ResourceBundle bundle;
 
     // =========== //
@@ -70,7 +67,7 @@ public class AbstractController implements Serializable {
      * @param key
      * @return
      */
-    protected String getMessageFromBundle(String key) {
+    protected String getFromBundle(String key) {
         return bundle.getString(key);
     }
 
@@ -141,32 +138,6 @@ public class AbstractController implements Serializable {
 
     private void addMessage(String mensagem, String componentId, Severity severidade) {
         FacesContext.getCurrentInstance().addMessage(componentId, new FacesMessage(severidade, mensagem, mensagem));
-    }
-
-    protected boolean containsErrorOrWarnMessages() {
-        return containsErrorMessages() || containsWarnMessages();
-    }
-
-    protected boolean containsWarnMessages() {
-        return contains(FacesMessage.SEVERITY_WARN);
-    }
-
-    protected boolean containsErrorMessages() {
-        return contains(FacesMessage.SEVERITY_ERROR);
-    }
-
-    private boolean contains(Severity severity) {
-        if (FacesContext.getCurrentInstance().getMessageList().isEmpty()) {
-            return false;
-        }
-
-        for (FacesMessage message : FacesContext.getCurrentInstance().getMessageList()) {
-            if (message.getSeverity().equals(severity)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }

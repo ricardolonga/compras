@@ -40,44 +40,24 @@
 	<!--   LISTA CRUD   --> 
 	<!-- ============== -->
 	
-	<url-mapping id="lista-search">
+	<url-mapping id="visualizar-listas">
 		<pattern value="/visualizar/listas" />
-		<view-id>/lista/search.jsf</view-id>
+		<view-id>/lista/consultarLista.jsf</view-id>
 	</url-mapping>
 
-	<url-mapping id="lista-view">
+	<url-mapping id="visualizar-lista">
 		<pattern value="/visualizar/lista/#{id}" />
-		<view-id>/lista/view.jsf</view-id>
+		<view-id>/lista/visualizarLista.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="lista-edit">
+	<url-mapping id="alterar-lista">
 		<pattern value="/alterar/lista/#{id}" />
-		<view-id>/lista/create.jsf</view-id>
+		<view-id>/lista/cadastrarLista.jsf</view-id>
 	</url-mapping>
 	
-	<url-mapping id="lista-create">
-		<pattern value="/novo/lista" />
-		<view-id>/lista/create.jsf?faces-redirect=true</view-id>
-	</url-mapping>
-	
-	<!-- ========== -->
-	<!--   IMAGEM   --> 
-	<!-- ========== -->
-
-<!-- 
-	<url-mapping id="visualizar-imagens">
-		<pattern value="/visualizar/imagens" />
-		<view-id>/imagem/consultarImagem.jsf</view-id>
-	</url-mapping> -->
-	
-	<url-mapping id="nova-imagem">
-		<pattern value="/nova/imagem" />
-		<view-id>/imagem/cadastrarImagem.jsf?editar=false</view-id>
-	</url-mapping>
-
-	<url-mapping id="alterar-imagem">
-		<pattern value="/alterar/imagem" />
-		<view-id>/imagem/cadastrarImagem.jsf?editar=true</view-id>
+	<url-mapping id="nova-lista">
+		<pattern value="/nova/lista" />
+		<view-id>/lista/cadastrarLista.jsf?faces-redirect=true</view-id>
 	</url-mapping>
 		
 </pretty-config>

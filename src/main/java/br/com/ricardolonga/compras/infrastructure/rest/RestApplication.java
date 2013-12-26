@@ -1,4 +1,4 @@
-package br.com.ricardolonga.compras.application.rest;
+package br.com.ricardolonga.compras.infrastructure.rest;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

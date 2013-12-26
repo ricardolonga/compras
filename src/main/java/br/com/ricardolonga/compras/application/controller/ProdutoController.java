@@ -1,54 +1,40 @@
 package br.com.ricardolonga.compras.application.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
 
 import org.primefaces.model.UploadedFile;
 
+import br.com.ricardolonga.compras.application.controller.shared.AbstractPaginationController;
 import br.com.ricardolonga.compras.application.utils.UIParameterBuilder;
 import br.com.ricardolonga.compras.domain.model.entities.Produto;
 import br.com.ricardolonga.compras.domain.model.valueobjects.Imagem;
 import br.com.ricardolonga.compras.domain.repositories.IProdutoRepository;
+import br.com.ricardolonga.compras.domain.repositories.IRepository;
 
 @Named
 @ConversationScoped
-public class ProdutoController extends AbstractController {
+public class ProdutoController extends AbstractPaginationController<Produto> {
 
     private static final long serialVersionUID = 1L;
 
     @Inject
     private Conversation conversation;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Inject
     private IProdutoRepository produtoRepository;
 
-    private Long id;
+    protected Long id;
 
     private Produto produto;
 
     private UploadedFile imagemCarregada;
 
-    private int page;
-    private long count;
-    private List<Produto> pageItems;
-
-    private Produto filtro = new Produto();
+    private final Produto filtro = new Produto();
 
     // ============= //
     // Controladores //
@@ -68,12 +54,13 @@ public class ProdutoController extends AbstractController {
             this.conversation.begin();
         }
 
-        if (this.id == null) {
+        if (id == null) {
             this.produto = this.filtro;
         } else {
             imagemCarregada = null;
             this.produto = findById(getId());
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("imagem", this.produto.getImagem().getConteudo());
+            if (this.produto.getImagem() != null)
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("imagem", this.produto.getImagem().getConteudo());
         }
     }
 
@@ -93,11 +80,11 @@ public class ProdutoController extends AbstractController {
         try {
             produtoRepository.persist(produto);
 
-            if (this.id == null) {
-                addInfoMessage(getMessageFromBundle("msg.cadastro_realizado_com_sucesso"));
+            if (id == null) {
+                addInfoMessage(getFromBundle("msg.cadastro_realizado_com_sucesso"));
                 redirect("visualizar-produtos");
             } else {
-                addInfoMessage(getMessageFromBundle("msg.atualizacao_realizada_com_sucesso"));
+                addInfoMessage(getFromBundle("msg.atualizacao_realizada_com_sucesso"));
                 redirect("visualizar-produto", UIParameterBuilder.create().id("id").value(this.produto.getId()).build());
             }
         } catch (Exception e) {
@@ -110,48 +97,30 @@ public class ProdutoController extends AbstractController {
 
         try {
             Produto deletableEntity = findById(getId());
-
             produtoRepository.remove(deletableEntity);
-
             redirect("visualizar-produtos");
         } catch (Exception e) {
-            addErrorMessage(e.getMessage());
+            logger.error(e);
+            addErrorMessage(getFromBundle("msg.erro_ao_excluir"));
+        }
+    }
+
+    @Override
+    protected void adicionarFiltros(StringBuilder query) {
+        if (filtro.temDescricao()) {
+            query.append(" where lower(e.descricao.texto) like :descricao");
         }
     }
 
     public void paginate() {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-
-        // Populate this.count
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        Root<Produto> root = countCriteria.from(Produto.class);
-        countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
-        this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
-
-        // Populate this.pageItems
-        CriteriaQuery<Produto> criteria = builder.createQuery(Produto.class);
-        root = criteria.from(Produto.class);
-        TypedQuery<Produto> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
-        query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
-        this.pageItems = query.getResultList();
+        super.paginate(filtro);
     }
 
-    private Predicate[] getSearchPredicates(Root<Produto> root) {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        List<Predicate> predicatesList = new ArrayList<Predicate>();
-
-        // String descricao = this.example.getDescricao().getTexto();
-        // if (descricao != null && !descricao.trim().isEmpty()) {
-        // predicatesList.add(builder.like(root.get("descricao.texto"), descricao));
-        // }
-
-        return predicatesList.toArray(new Predicate[predicatesList.size()]);
-    }
-
-    public List<Produto> getAll() {
-        return produtoRepository.findAll();
-        // CriteriaQuery<Produto> criteria = this.entityManager.getCriteriaBuilder().createQuery(Produto.class);
-        // return this.entityManager.createQuery(criteria.select(criteria.from(Produto.class))).getResultList();
+    @Override
+    protected void adicionarParametros(Query query) {
+        if (filtro.temDescricao()) {
+            query.setParameter("descricao", "%" + filtro.getDescricao().getTexto().toLowerCase() + "%");
+        }
     }
 
     // ========= //
@@ -170,6 +139,10 @@ public class ProdutoController extends AbstractController {
         return this.produto;
     }
 
+    public Produto getFiltro() {
+        return this.filtro;
+    }
+
     public void setImagemCarregada(UploadedFile imagemCarregada) {
         this.imagemCarregada = imagemCarregada;
     }
@@ -178,36 +151,10 @@ public class ProdutoController extends AbstractController {
         return this.imagemCarregada;
     }
 
-    public int getPage() {
-        return this.page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getPageSize() {
-        return 2;
-    }
-
-    public Produto getFiltro() {
-        return this.filtro;
-    }
-
-    public void setFiltro(Produto filtro) {
-        this.filtro = filtro;
-    }
-
-    public void pesquisar() {
-        this.page = 0;
-    }
-
-    public List<Produto> getPageItems() {
-        return this.pageItems;
-    }
-
-    public long getCount() {
-        return this.count;
+    @Override
+    @SuppressWarnings("rawtypes")
+    protected IRepository getRepository() {
+        return produtoRepository;
     }
 
 }

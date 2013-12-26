@@ -1,65 +1,51 @@
 package br.com.ricardolonga.compras.application.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Resource;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.Query;
 
+import br.com.ricardolonga.compras.application.controller.shared.AbstractPaginationController;
+import br.com.ricardolonga.compras.application.utils.UIParameterBuilder;
+import br.com.ricardolonga.compras.domain.model.entities.Item;
 import br.com.ricardolonga.compras.domain.model.entities.Lista;
+import br.com.ricardolonga.compras.domain.repositories.IListaRepository;
+import br.com.ricardolonga.compras.domain.repositories.IRepository;
 
 @Named
-@Stateful
 @ConversationScoped
-public class ListaController extends AbstractController {
+public class ListaController extends AbstractPaginationController<Lista> {
 
     private static final long serialVersionUID = 1L;
-
-    /*
-     * Support creating and retrieving Lista entities
-     */
-    private Long id;
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    private Lista lista;
-
-    public Lista getLista() {
-        return this.lista;
-    }
 
     @Inject
     private Conversation conversation;
 
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
-    private EntityManager entityManager;
+    @Inject
+    private IListaRepository listaRepository;
 
-    public String create() {
+    protected Long id;
+
+    private Lista lista;
+
+    private final Lista filtro = new Lista();
+
+    private Item itemASerAdicionado = new Item();
+
+    private final Item itemSelecionado = new Item();
+
+    /** Por padrão a grid não é apresentada. */
+    private boolean renderizarGridParaAdicionarItem = false;
+
+    // ============= //
+    // Controladores //
+    // ============= //
+
+    public void novo() {
         this.conversation.begin();
-        return "pretty:lista-create";
+        redirect("nova-lista");
     }
 
     public void retrieve() {
@@ -71,167 +57,146 @@ public class ListaController extends AbstractController {
             this.conversation.begin();
         }
 
-        if (this.id == null) {
-            this.lista = this.example;
+        if (id == null) {
+            this.lista = this.filtro;
         } else {
             this.lista = findById(getId());
         }
     }
 
     public Lista findById(Long id) {
-        return this.entityManager.find(Lista.class, id);
+        return listaRepository.findById(id);
     }
 
-    /*
-     * Support updating and deleting Lista entities
-     */
-    public String update() {
+    public void atualizar() {
         this.conversation.end();
 
         try {
-            if (this.id == null) {
-                this.entityManager.persist(this.lista);
-                return "search?faces-redirect=true";
+            listaRepository.persist(lista);
+
+            if (id == null) {
+                addInfoMessage(getFromBundle("msg.cadastro_realizado_com_sucesso"));
+                redirect("visualizar-listas");
             } else {
-                this.entityManager.merge(this.lista);
-                return "view?faces-redirect=true&id=" + this.lista.getId();
+                addInfoMessage(getFromBundle("msg.atualizacao_realizada_com_sucesso"));
+                redirect("visualizar-lista", UIParameterBuilder.create().id("id").value(this.lista.getId()).build());
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-            return null;
+            addErrorMessage(e.getMessage());
         }
     }
 
-    public String delete() {
+    public void excluir() {
         this.conversation.end();
 
         try {
             Lista deletableEntity = findById(getId());
-
-            this.entityManager.remove(deletableEntity);
-            this.entityManager.flush();
-            return "search?faces-redirect=true";
+            listaRepository.remove(deletableEntity);
+            redirect("visualizar-listas");
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-            return null;
+            logger.error(e);
+            addErrorMessage(getFromBundle("msg.erro_ao_excluir"));
         }
     }
 
-    /*
-     * Support searching Lista entities with pagination
-     */
-    private int page;
-    private long count;
-    private List<Lista> pageItems;
-
-    private Lista example = new Lista();
-
-    public int getPage() {
-        return this.page;
+    public void iniciarCriacaoNovoItem() {
+        itemASerAdicionado = new Item();
+        itemASerAdicionado.setLista(lista);
+        showGridNovoItem();
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void confirmarNovoItem() {
+        lista.getItens().add(itemASerAdicionado);
+        hideGridNovoItem();
     }
 
-    public int getPageSize() {
-        return 10;
+    public void cancelarNovoItem() {
+        hideGridNovoItem();
     }
 
-    public Lista getExample() {
-        return this.example;
+    public void editarItem(Item item) {
+        itemASerAdicionado = item;
+        showGridNovoItem();
     }
 
-    public void setExample(Lista example) {
-        this.example = example;
+    public void itemAdicionadoNoCarrinho(Item itemAdicionadoNoCarrinho) {
+        this.conversation.end();
+
+        lista.getItens().remove(itemAdicionadoNoCarrinho);
+        listaRepository.persist(lista);
+        redirect("visualizar-lista", UIParameterBuilder.create().id("id").value(lista.getId()).build());
     }
 
-    public void search() {
-        this.page = 0;
+    public void deletarItem(Item item) {
+        lista.getItens().remove(item);
+    }
+
+    private void showGridNovoItem() {
+        renderizarGridParaAdicionarItem = true;
+    }
+
+    private void hideGridNovoItem() {
+        renderizarGridParaAdicionarItem = false;
     }
 
     public void paginate() {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-
-        // Populate this.count
-
-        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        Root<Lista> root = countCriteria.from(Lista.class);
-        countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
-        this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
-
-        // Populate this.pageItems
-
-        CriteriaQuery<Lista> criteria = builder.createQuery(Lista.class);
-        root = criteria.from(Lista.class);
-        TypedQuery<Lista> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
-        query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
-        this.pageItems = query.getResultList();
+        super.paginate(filtro);
     }
 
-    private Predicate[] getSearchPredicates(Root<Lista> root) {
-        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        List<Predicate> predicatesList = new ArrayList<Predicate>();
-
-        String nomeLista = this.example.getDescricao().getTexto();
-        if (nomeLista != null && !"".equals(nomeLista)) {
-            predicatesList.add(builder.like(root.<String> get("nomeLista"), '%' + nomeLista + '%'));
+    @Override
+    protected void adicionarFiltros(StringBuilder query) {
+        if (filtro.temDescricao()) {
+            query.append(" where lower(e.descricao.texto) like :descricao");
         }
-
-        return predicatesList.toArray(new Predicate[predicatesList.size()]);
     }
 
-    public List<Lista> getPageItems() {
-        return this.pageItems;
+    @Override
+    protected void adicionarParametros(Query query) {
+        if (filtro.temDescricao()) {
+            query.setParameter("descricao", "%" + filtro.getDescricao().getTexto().toLowerCase() + "%");
+        }
     }
 
-    public long getCount() {
-        return this.count;
+    // ========= //
+    // Acessores //
+    // ==========//
+
+    public Long getId() {
+        return this.id;
     }
 
-    /*
-     * Support listing and POSTing back Lista entities (e.g. from inside an HtmlSelectOneMenu)
-     */
-    public List<Lista> getAll() {
-        CriteriaQuery<Lista> criteria = this.entityManager.getCriteriaBuilder().createQuery(Lista.class);
-        return this.entityManager.createQuery(criteria.select(criteria.from(Lista.class))).getResultList();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Resource
-    private SessionContext sessionContext;
-
-    public Converter getConverter() {
-        final ListaController ejbProxy = this.sessionContext.getBusinessObject(ListaController.class);
-
-        return new Converter() {
-            @Override
-            public Object getAsObject(FacesContext context, UIComponent component, String value) {
-                return ejbProxy.findById(Long.valueOf(value));
-            }
-
-            @Override
-            public String getAsString(FacesContext context, UIComponent component, Object value) {
-                if (value == null) {
-                    return "";
-                }
-
-                return String.valueOf(((Lista) value).getId());
-            }
-        };
+    public Lista getLista() {
+        return this.lista;
     }
 
-    /*
-     * Support adding children to bidirectional, one-to-many tables
-     */
-    private Lista add = new Lista();
-
-    public Lista getAdd() {
-        return this.add;
+    public Lista getFiltro() {
+        return this.filtro;
     }
 
-    public Lista getAdded() {
-        Lista added = this.add;
-        this.add = new Lista();
-        return added;
+    @Override
+    @SuppressWarnings("rawtypes")
+    protected IRepository getRepository() {
+        return listaRepository;
     }
+
+    public Item getItemSelecionado() {
+        return this.itemSelecionado;
+    }
+
+    public boolean getRenderizarGridParaAdicionarItem() {
+        return renderizarGridParaAdicionarItem;
+    }
+
+    public Item getItemASerAdicionado() {
+        return this.itemASerAdicionado;
+    }
+
+    public void setItemASerAdicionado(Item itemASerAdicionado) {
+        this.itemASerAdicionado = itemASerAdicionado;
+    }
+
 }

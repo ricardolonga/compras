@@ -1,7 +1,7 @@
 #-----------------------------------#
 # Ignora todos os testes do pacote  #
 #-----------------------------------#
-#br\.com\.ricardolonga\.googlemapsdirections\.tests\..*
+br\.com\.ricardolonga\.compras\.tests\..*
 
 #-----------------------------------#
 # Ignora todos os testes do projeto #
@@ -11,4 +11,4 @@
 #-----------------------------------#
 # Ignora as classes abaixo 		    #
 #-----------------------------------#
-.*ItemServiceTest
+#.*ProdutoServiceTest

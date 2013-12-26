@@ -16,6 +16,12 @@ public class Valor extends BaseValueObject<Valor> {
 
     private BigDecimal valor = new BigDecimal(0);
 
+    public static Valor newInstance(BigDecimal valor) {
+        Valor instance = new Valor();
+        instance.setValor(valor);
+        return instance;
+    }
+
     @Column
     public BigDecimal getValor() {
         return valor;
@@ -33,6 +39,11 @@ public class Valor extends BaseValueObject<Valor> {
     @Override
     protected EqualsBuilder getEqualsBuilder(Valor other) {
         return new EqualsBuilder().append(valor, other.valor);
+    }
+
+    @Override
+    public String toString() {
+        return valor.toString();
     }
 
 }

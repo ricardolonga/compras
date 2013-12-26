@@ -1,5 +1,7 @@
 package br.com.ricardolonga.compras.domain.model.entities;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -8,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -20,8 +23,6 @@ public class Item extends BaseEntity<Item> {
     private Produto produto;
 
     private int quantidade;
-
-    private boolean adicionadoNoCarrinho;
 
     private Lista lista;
 
@@ -43,15 +44,6 @@ public class Item extends BaseEntity<Item> {
         this.quantidade = quantidade;
     }
 
-    @Column
-    public boolean getAdicionadoNoCarrinho() {
-        return this.adicionadoNoCarrinho;
-    }
-
-    public void setAdicionadoNoCarrinho(final boolean adicionadoNoCarrinho) {
-        this.adicionadoNoCarrinho = adicionadoNoCarrinho;
-    }
-
     @ManyToOne
     public Lista getLista() {
         return this.lista;
@@ -61,9 +53,18 @@ public class Item extends BaseEntity<Item> {
         this.lista = lista;
     }
 
+    @Transient
+    public BigDecimal getTotal() {
+        if (produto == null) {
+            return BigDecimal.ZERO;
+        }
+
+        return produto.getValorUnitario().getValor().multiply(new BigDecimal(quantidade));
+    }
+
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(id).append(produto).append(quantidade).append(adicionadoNoCarrinho).toHashCode();
+        return new HashCodeBuilder().append(id).append(produto).append(quantidade).toHashCode();
     }
 
     @Override

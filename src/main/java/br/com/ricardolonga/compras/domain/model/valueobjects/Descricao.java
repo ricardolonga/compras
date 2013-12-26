@@ -35,4 +35,10 @@ public class Descricao extends BaseValueObject<Descricao> {
         return new EqualsBuilder().append(texto, other.texto);
     }
 
+    public static Descricao newInstance(String texto) {
+        Descricao instance = new Descricao();
+        instance.setTexto(texto);
+        return instance;
+    }
+
 }

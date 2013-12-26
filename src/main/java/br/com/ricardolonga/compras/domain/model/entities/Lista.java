@@ -1,7 +1,8 @@
 package br.com.ricardolonga.compras.domain.model.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -26,7 +28,7 @@ public class Lista extends BaseEntity<Lista> {
 
     private Descricao descricao = new Descricao();
 
-    private Set<Item> itens = new HashSet<Item>();
+    private List<Item> itens = new ArrayList<>();
 
     @Embedded
     public Descricao getDescricao() {
@@ -37,13 +39,24 @@ public class Lista extends BaseEntity<Lista> {
         this.descricao = descricao;
     }
 
-    @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    public Set<Item> getItens() {
+    @OneToMany(mappedBy = "lista", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    public List<Item> getItens() {
         return this.itens;
     }
 
-    public void setItens(final Set<Item> itens) {
+    public void setItens(final List<Item> itens) {
         this.itens = itens;
+    }
+
+    @Transient
+    public BigDecimal getTotal() {
+        BigDecimal total = BigDecimal.ZERO;
+
+        for (Item item : itens) {
+            total = total.add(item.getTotal());
+        }
+
+        return total;
     }
 
     @Override
@@ -54,6 +67,10 @@ public class Lista extends BaseEntity<Lista> {
     @Override
     public String toString() {
         return descricao.getTexto();
+    }
+
+    public boolean temDescricao() {
+        return descricao != null && descricao.getTexto() != null && !descricao.getTexto().isEmpty();
     }
 
 }

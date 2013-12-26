@@ -6,9 +6,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import br.com.ricardolonga.compras.domain.model.entities.BaseEntity;
-import br.com.ricardolonga.compras.domain.repositories.IGenericRepository;
+import br.com.ricardolonga.compras.domain.repositories.IRepository;
 
-public class GenericDAO<T extends BaseEntity<?>> implements IGenericRepository<T, Long> {
+public abstract class GenericDAO<T extends BaseEntity<?>> implements IRepository<T, Long> {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -32,12 +32,18 @@ public class GenericDAO<T extends BaseEntity<?>> implements IGenericRepository<T
     @Override
     public void remove(T entity) {
         entityManager.remove(entityManager.merge(entity));
+        entityManager.flush();
     }
 
     @Override
     public List<T> findAll() {
         String sql = "FROM " + typeClass.getSimpleName();
         return entityManager.createQuery(sql, typeClass).getResultList();
+    }
+
+    @Override
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
 }

@@ -61,4 +61,8 @@ public class Produto extends BaseEntity<Produto> {
         return descricao.getTexto();
     }
 
+    public boolean temDescricao() {
+        return descricao != null && descricao.getTexto() != null && !descricao.getTexto().isEmpty();
+    }
+
 }

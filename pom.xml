@@ -133,6 +133,7 @@
 	<profiles>
 		<profile>
 			<id>openshift</id>
+			
 			<build>
 				<finalName>compras</finalName>
 				<plugins>
@@ -150,9 +151,11 @@
 		
 		<profile>
 			<id>arq-jboss_as_remote_7.x</id>
+			
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
+			
 			<build>
 				<plugins>
 					<plugin>
@@ -167,6 +170,7 @@
 					</plugin>
 				</plugins>
 			</build>
+			
 			<dependencies>
 				<dependency>
 					<groupId>org.jboss.as</groupId>
