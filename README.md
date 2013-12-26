@@ -38,6 +38,8 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 
 ### Recommended techniques but not used
 ---
+* MongoDB (NoSQL);
+* QueryDSL (instead Criteria API);
 * Apache CODI (JSF module for @ViewAccessScoped);
 * Behavior Driven Development.
 
