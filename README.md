@@ -27,20 +27,19 @@ Any Java EE 6 Application Server Web Profile Certified (Preferred JBoss AS 7.x).
 ---
 * JBoss AS 7 (with H2 database);
 * Primefaces;
-* Apache CODI (JSF module for @ViewAccessScoped);
 * Eclipse Kepler;
 * JBoss Forge;
 * Arquillian for integrated/unit tests;
 * Openshift;
 * Astah Community (UML Editor);
 * Git / Github;
-* Test Driven Development;
-* Domain Driven Design.
+* Domain Driven Design;
+* PrettyFaces for URL rewriting.
 
 ### Recommended techniques but not used
 ---
-* Behavior Driven Development;
-* PrettyFaces for URL rewriting.
+* Apache CODI (JSF module for @ViewAccessScoped);
+* Behavior Driven Development.
 
 ### Autor
 ---
