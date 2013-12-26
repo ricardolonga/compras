@@ -6,3 +6,5 @@ target
 .classpath
 /.forge_settings
 /.README.md.html
+/deployments
+.openshift
